@@ -1,0 +1,293 @@
+%% This is file `elsarticle-template-1-num.tex',
+%%
+%% Copyright 2009 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%%
+%% $Id: elsarticle-template-1-num.tex 149 2009-10-08 05:01:15Z rishi $
+%% $URL: http://lenova.river-valley.com/svn/elsbst/trunk/elsarticle-template-1-num.tex $
+%%
+% \documentclass[preprint,12pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+ \documentclass[final,1p,times]{elsarticle}
+% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% The graphicx package provides the includegraphics command.
+\usepackage{graphicx}
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+\usepackage{amsthm}
+\usepackage{amsmath}
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+% \usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+\journal{Journal Name}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+\title{Predictive Normalized Likelihood for Regression}
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+% \author{Koby Bibas}
+% \author{Meir Feder}
+% \address[student]{Tel Aviv University}
+
+\begin{abstract}
+%% Text of abstract
+
+\end{abstract}
+
+\begin{keyword}
+
+%% keywords here, in the form: keyword \sep keyword
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+
+%%
+%% Start line numbering here if you want
+%%
+\linenumbers
+
+%% main text
+\section{Introduction} \label{Introduction}
+Regression problem is a common machine learning task in which given a data with labels which are continuous quantity, the goal is to predict the label of a new data sample. 
+
+
+The common settings of the task are the stochastic setting and individual settings. In the stochastic setting the data and labels are generated from probabilistic source. The individual setting describes scenario in which there is not rule of creating the data and labels. This is somewhat too hard so our goal is to be as good as a Jinni which is a learner who also know the label of the test sample and fits a probabilistic assignments between the data and labels. The log-loss difference between our learner and the Jinny is known as the regret. 
+
+The most common approach of generating a leaner is the Empirical Risk Minimization (ERM) which assumes that the training data distribution is as the test data. In this paper, we use the Predictive Normalized Likelihood (PNML). We assumes the label of the test data is known, fit a learner to it and predict the assumes label by it. We repeat the process for all possible label. In the end we normalize the probabilities from each label and return the PNML estimator.
+
+
+% Maecenas \cite{Smith:2012qr} fermentum \cite{Smith:2013jd} 
+
+
+
+\subsection{Previous Results}
+Predictive normalized maximum likelihood (PNML)
+
+\subsection{Main Contributions}
+Place holder.
+
+\subsection{Paper Outline}
+Place holder.
+
+\pagebreak
+\section{Formal Problem Definition}
+Given data and labels $\{x_i, y_i\}_{i=0}^{N-1}$ where $x_i \in R^M, y\in R$ are deterministic. Our model takes the form:
+\begin{equation}
+y_i=x_i^T \theta + e_i
+\end{equation}
+Where $\theta \in R^M$ are the learnable parameters and $e$ is white Gaussian noise with variance of $\sigma$. Our goal is to predict $y_N$ based on a new sample $x_N$:
+\begin{equation}
+y_N = x_N^T \theta + e_N
+\end{equation}
+In this case $y_N$ has Gaussian distribution which depends on the learnable parameters $\theta$ 
+\begin{equation}
+P_{\theta}(y_N) 
+=\frac{1}{\sqrt[]{2\pi\sigma^2}}exp\bigg\{-\frac{1}{2\sigma^2}\big(y_N- x_N^T\theta \big)^2\bigg\}  \\
+\end{equation}
+Denote $\Gamma=\int_R \max_{\theta} P_\theta(y_N|X^T)dy_N$ the PNML estimator of $y_N$ given $\{x_i,y_i\}_{i=0}^{N-1}$ and $x_N$ is:
+\begin{equation} \label{eq:pnml_def}
+Q(y_N) = \frac{1}{\Gamma} \max_{\theta} P_\theta(y_N)
+\end{equation}
+
+
+\section{PNML Evaluation}
+Using the notations $X = \begin{bmatrix} x_0 & x_1 & \dots & x_N \end{bmatrix}$,
+$y = \begin{bmatrix} y_0 & y_1 & \dots & y_N \end{bmatrix} ^T$,
+$e = \begin{bmatrix} e_0 & e_1 & \dots & e_N  \end{bmatrix}  ^T$
+and assuming that the label of $x_N$ is given ($y_N$ is known), the optimal solution under the mean square error is the least squares estimator:
+\begin{equation}
+\theta ^*_N = (X^T X)^{-1} X y
+\end{equation}
+Rewrite it in the recursive least square formulation:
+\begin{equation}
+\theta ^*_N=\theta^*_{N-1} + P_N x_n (x_N^T \theta^*_{N-1} - y_n)
+\end{equation}
+where $\theta ^*_{N-1}$ is the optimal predictor based on the samples $\{x_i, y_i\}_{i=0}^{N-1}$ and $P_N$ is the covariance matrix of the data. Without loss of generality, when $\mu _{X} = 0$ then $P_N = (XX^T)^{-1}$ 
+The probability distribution of our estimation of $y_N$ can be written as
+\begin{equation}
+\begin{split}
+P_{\theta_N ^*}(y_N) 
+&=\frac{1}{\sqrt[]{2\pi\sigma^2}}exp\bigg\{-\frac{1}{2\sigma^2}\big(y_N- x_N^T\theta ^*_N \big)^2\bigg\}  \\
+&=\frac{1}{\sqrt[]{2\pi\sigma^2}}exp\bigg\{-\frac{1}{2\sigma^2}\bigg(y_N- x_N^T \big(\theta^*_{N-1} + P_N x_N (y_N - x_N^T \theta^*_{N-1}) \big) \bigg)^2\bigg\}  \\
+&=\frac{1}{\sqrt[]{2\pi\sigma^2}}
+exp\bigg\{-\frac{1}{2\sigma^2}\bigg((1-x_N^T P_N x_N)y_N- x_N^T \theta^*_{N-1} + x_N^T P_N x_N x_N^T \theta^*_{N-1} \bigg)^2\bigg\}  \\
+&=\frac{1}{\sqrt[]{2\pi\sigma^2}}
+exp\bigg\{-\frac{1}{2\sigma^2}\bigg((1-x_N^T P_N x_N)y_N-(1 - x_N^T P_N x_N ) x_N^T \theta^*_{N-1} \bigg)^2\bigg\}  \\
+&=\frac{1}{\sqrt[]{2\pi\sigma^2}}
+exp\bigg\{-\frac{(1 - x_N^T P_N x_N )^2 }{2\sigma^2}\bigg(y_N-x_N^T \theta^*_{N-1} \bigg)^2\bigg\}  \\
+\end{split}
+\end{equation}
+
+
+Evaluation of the PNML normalization factor from eq. \ref{eq:pnml_def}  gives:
+\begin{equation}
+\begin{split}
+\Gamma &=\int_R \max_{\theta} P_\theta(y_N|X^T)dy_N =\int_{-\infty}^{\infty} \frac{1}{\sqrt[]{2\pi\sigma^2}}
+exp\bigg\{-\underbrace{\frac{(1 - x_N^T P_N x_N )^2 }{2\sigma^2}}_{c^2}
+\bigg(y_N-\underbrace{x_N^T \theta^*_{N-1}}_{b}\bigg)^2\bigg\} dy_N\\ 
+&=\int_{-\infty}^{\infty} \frac{1}{\sqrt[]{2\pi\sigma^2}}
+exp\{-c^2\big(y_N-b\big)^2\} dy_N 
+=\frac{1}{\sqrt[]{2\pi\sigma^2}} \frac{\sqrt[]{\pi}}{c} 
+=\frac{1}{\sqrt[]{2\pi\sigma^2}} \frac{\sqrt[]{\pi}}{\sqrt[]{\frac{(1 - x_N^T P_N x_N )^2 }{2\sigma^2}}}  \\
+&=\frac{1}{1 - x_N^T P_N x_N } 
+=\frac{1}{1 - x_N^T (XX^T)^{-1} x_N } \\
+\end{split}
+\end{equation}
+
+% For the 1D estimator case $X=[x_1,\dots,x_N]$
+% \begin{equation}
+% \Gamma = \frac{1}{1-x_N \frac{1}{\sum_{i=0}^N x_i^2} x_N}
+% =\frac{\sum_{i=0}^N x_i^2}{\sum_{i=0}^N x_i^2-x^2_N } =\frac{\sum_{i=0}^N x_i^2}{\sum_{i=0}^{N-1} x_i^2} = 1+ \frac{x_N^2}{\sum_{i=0}^{N-1} x_i^2}
+% \end{equation}
+% which is the same as \ref{NormalizationNDim}
+And finally, given a new data sample $x_N$ the PNML of $y_N$ is:
+\begin{equation}
+% \begin{split}
+Q(y_N)
+&=\frac{1}{\Gamma}\max_{\theta}P_{\theta}(y_N) \\
+&=\frac{1 - x_N^T (XX^T)^{-1} x_N }{\sqrt[]{2\pi\sigma^2}}
+exp\bigg\{-\frac{(1 - x_N^T (XX^T)^{-1} x_N )^2 }{2\sigma^2}\bigg(y_N-x_N^T \theta^*_{N-1} \bigg)^2\bigg\} \\
+% \end{split}
+\end{equation}
+
+
+We can also calculate the regret of the PNML which is the log of the normalization factor:
+\begin{equation}
+% \begin{split}
+log(\Gamma)
+&=log(\frac{1}{1 - x_N^T (XX^T)^{-1} x_N } ) \\
+&= -log(1 - x_N^T (XX^T)^{-1} x_N) 
+% \end{split}
+\end{equation}
+
+\section{Simulation}
+Place holder.
+\begin{figure}[h]
+\centering\includegraphics[width=0.4\linewidth]{placeholder}
+\caption{Figure caption}
+\end{figure}
+
+\section{Conclusion}
+Place holder.
+
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+%% \section{}
+%% \label{}
+
+%% References
+%%
+%% Following citation commands can be used in the body text:
+%% Usage of \cite is as follows:
+%%   \cite{key}          ==>>  [#]
+%%   \cite[chap. 2]{key} ==>>  [#, chap. 2]
+%%   \citet{key}         ==>>  Author [#]
+
+%% References with bibTeX database:
+
+\bibliographystyle{model1-num-names}
+\bibliography{references.bib}
+
+%% Authors are advised to submit their bibtex database files. They are
+%% requested to list a bibtex style file in the manuscript if they do
+%% not want to use model1-num-names.bst.
+
+%% References without bibTeX database:
+
+% \begin{thebibliography}{00}
+
+%% \bibitem must have the following form:
+%%   \bibitem{key}...
+%%
+
+% \bibitem{}
+
+% \end{thebibliography}
+
+
+\end{document}
+
+%%
+%% End of file `elsarticle-template-1-num.tex'.
