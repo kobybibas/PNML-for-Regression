@@ -114,7 +114,7 @@ and assuming that the label of $x_N$ is given ($y_N$ is known), the optimal solu
 \theta ^*_N = (X^T X)^{-1} X y
 \end{equation}
 Rewrite it in the recursive least square formulation:
-\begin{equation}
+\begin{equation} \label{eq:rls_update}
 \theta ^*_N=\theta^*_{N-1} + P_N x_n (x_N^T \theta^*_{N-1} - y_n)
 \end{equation}
 where $\theta ^*_{N-1}$ is the optimal predictor based on the samples $\{x_i, y_i\}_{i=0}^{N-1}$ and $P_N$ is the covariance matrix of the data. Without loss of generality, when $\mu _{X} = 0$ then $P_N = (XX^T)^{-1}$ 
@@ -174,16 +174,20 @@ log(\Gamma)
 \end{equation}
 
 \section{PNML with Regularization} \label{sec:PNMLwithReg}
-The previous section dealt with the least sqaure estimator. here we show the evaluation in case of the least sqaure with regularization. In this case the solution of the estimator is
+The previous section dealt with the least squares estimator. Here we show the evaluation in case of the least squares with regularization term
+\begin{equation}
+    Loss(X,y)= ||y-X^T \theta||_2 + \lambda ||\theta||_2
+\end{equation}
+where $\lambda$ is the regularization term.
+In this case the solution of the estimator is
 \begin{equation}
 \theta ^*_N = (X^T X+ \lambda I)^{-1} X y
 \end{equation}
-where $\lambda$ is the regularization weight.
-Rewrite it in the recursive least square formulation:
+Rewrite it in the recursive least square formulation 
 \begin{equation}
 \theta ^*_N=\theta^*_{N-1} + P_N x_n (x_N^T \theta^*_{N-1} - y_n)
 \end{equation}
-however, now $P_N= (X^T X+ \lambda I)$. the rest of the PNML evaulation stays the same and therefore the normalization factor becomes
+which is the same as Equation \ref{eq:rls_update}, however, in this case $P_N= (X^T X+ \lambda I)$. The rest of the PNML evaluation stays the same and therefore the normalization factor becomes
 \begin{equation}
     \Gamma =\frac{1}{1 - x_N^T (XX^T+ \lambda I)^{-1} x_N } 
 \end{equation}
@@ -195,10 +199,12 @@ exp\bigg\{-\frac{(1 - x_N^T (XX^T + \lambda I)^{-1} x_N )^2 }{2\sigma^2}\bigg(y_
 \end{equation}
 
 \section{Simulation} \label{sec:Simulation}
-We run a simulation in which we generated uniformly 4 random points in the interval [-1, 1] with zero mean. The goal is to estimate the polynomial coefficient. The least square estimator is shown in Figure \ref{fig:least_sqaures}. we used the PNML estimator and computed its regret from equation \ref{eq:regret} and the it is shown in Figure \ref{fig:regret} 
+We run a simulation in which we generated uniformly 5 random points in the interval [-1, 1] with zero mean. The goal is to estimate the polynomial coefficient. The least square estimator is shown in Figure \ref{fig:least_sqaures}. we used the PNML estimator and computed its regret from equation \ref{eq:regret} and the it is shown in Figure \ref{fig:regret} 
+
+We run another simulation in which we generated uniformly 10 random points. Then, least squares estimator with regularization was fitted to the generated data. The regularization weight $lambda$ values where 0, 0.1 and 1.0. The least square estimator with the different regularization terms is shown in Figure \ref{fig:least_sqaures_with_reg}. The regret of the PNML estimator with regularization of the same data is in Figure \ref{fig:regret_with_reg} 
 
 \begin{figure}[h] 
-\centering\includegraphics[width=0.6\linewidth]{least_sqaures.png}
+\centering\includegraphics[width=0.6\linewidth]{least_sqaures_plot.png}
 \caption{The fitted least square estimator based on the training set.}
 \label{fig:least_sqaures}
 \end{figure}
@@ -207,6 +213,18 @@ We run a simulation in which we generated uniformly 4 random points in the inter
 \centering\includegraphics[width=0.6\linewidth]{regret_plot.png}
 \caption{The regret of the PNML estimator.}
 \label{fig:regret}
+\end{figure}
+
+\begin{figure}[h] 
+\centering\includegraphics[width=0.6\linewidth]{least_sqaure_with_reg_plot.png}
+\caption{The fitted least squares estimator with regularization.}
+\label{fig:least_sqaures_with_reg}
+\end{figure}
+
+\begin{figure}[h]
+\centering\includegraphics[width=0.6\linewidth]{regret_with_reg_plot.png}
+\caption{The regret of the PNML estimator with regularization.}
+\label{fig:regret_with_reg}
 \end{figure}
 
 \section{Conclusion} \label{sec:Conclusion}
