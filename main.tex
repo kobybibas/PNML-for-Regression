@@ -168,21 +168,45 @@ We can also calculate the regret of the PNML which is the log of the normalizati
 \begin{equation} \label{eq:regret}
 % \begin{split}
 log(\Gamma)
-&=log(\frac{1}{1 - x_N^T (XX^T)^{-1} x_N } ) \\
+&=log\left(\frac{1}{1 - x_N^T (XX^T)^{-1} x_N } \right) \\
 &= -log(1 - x_N^T (XX^T)^{-1} x_N) 
 % \end{split}
 \end{equation}
 
+\section{PNML with Regularization} \label{sec:PNMLwithReg}
+The previous section dealt with the least sqaure estimator. here we show the evaluation in case of the least sqaure with regularization. In this case the solution of the estimator is
+\begin{equation}
+\theta ^*_N = (X^T X+ \lambda I)^{-1} X y
+\end{equation}
+where $\lambda$ is the regularization weight.
+Rewrite it in the recursive least square formulation:
+\begin{equation}
+\theta ^*_N=\theta^*_{N-1} + P_N x_n (x_N^T \theta^*_{N-1} - y_n)
+\end{equation}
+however, now $P_N= (X^T X+ \lambda I)$. the rest of the PNML evaulation stays the same and therefore the normalization factor becomes
+\begin{equation}
+    \Gamma =\frac{1}{1 - x_N^T (XX^T+ \lambda I)^{-1} x_N } 
+\end{equation}
+and the predictor is 
+\begin{equation}
+q_{PNML}(y_N, \lambda)
+&=\frac{1 - x_N^T (XX^T + \lambda I)^{-1} x_N }{\sqrt[]{2\pi\sigma^2}}
+exp\bigg\{-\frac{(1 - x_N^T (XX^T + \lambda I)^{-1} x_N )^2 }{2\sigma^2}\bigg(y_N-x_N^T \theta^*_{N-1} \bigg)^2\bigg\} \\
+\end{equation}
+
 \section{Simulation} \label{sec:Simulation}
-We run a simulation in which we generated uniformly 4 random points in the interval [-1, 1] with mean 0. The goal is to estimate the polynomial coefficient. The least square estimator is shown in Figure \ref{fig:least_sqaures}. we used the PNML estimator and comuted its regret from equation \ref{eq:regret} and the it is shown in Figure \ref{fig:regret} 
-\begin{figure}[h] \label{fig:least_sqaures}
-\centering\includegraphics[width=0.8\linewidth]{least_sqaures.png}
-\caption{Figure caption}
+We run a simulation in which we generated uniformly 4 random points in the interval [-1, 1] with zero mean. The goal is to estimate the polynomial coefficient. The least square estimator is shown in Figure \ref{fig:least_sqaures}. we used the PNML estimator and computed its regret from equation \ref{eq:regret} and the it is shown in Figure \ref{fig:regret} 
+
+\begin{figure}[h] 
+\centering\includegraphics[width=0.6\linewidth]{least_sqaures.png}
+\caption{The fitted least square estimator based on the training set.}
+\label{fig:least_sqaures}
 \end{figure}
 
-\begin{figure}[h] \label{fig:regret}
-\centering\includegraphics[width=0.8\linewidth]{regret_plot.png}
-\caption{Figure caption}
+\begin{figure}[h]
+\centering\includegraphics[width=0.6\linewidth]{regret_plot.png}
+\caption{The regret of the PNML estimator.}
+\label{fig:regret}
 \end{figure}
 
 \section{Conclusion} \label{sec:Conclusion}
