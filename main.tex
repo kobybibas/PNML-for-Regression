@@ -199,14 +199,14 @@ exp\bigg\{-\frac{(1 - x_N^T (XX^T + \lambda I)^{-1} x_N )^2 }{2\sigma^2}\bigg(y_
 \end{equation}
 
 \section{Simulation} \label{sec:Simulation}
-We run a simulation in which we generated uniformly 5 random points in the interval [-1, 1] with zero mean. The goal is to estimate the polynomial coefficient. The least square estimator is shown in Figure \ref{fig:least_sqaures}. we used the PNML estimator and computed its regret from equation \ref{eq:regret} and the it is shown in Figure \ref{fig:regret} 
+We run a simulation in which we generated uniformly 5 random points in the interval [-1, 1] with zero mean. The goal is to estimate the polynomial coefficient. The least square estimator is shown in Figure \ref{fig:least_squares}. we used the PNML estimator and computed its regret from equation \ref{eq:regret} and the it is shown in Figure \ref{fig:regret} 
 
-We run another simulation in which we generated uniformly 10 random points. Then, least squares estimator with regularization was fitted to the generated data. The regularization weight $lambda$ values where 0, 0.1 and 1.0. The least square estimator with the different regularization terms is shown in Figure \ref{fig:least_sqaures_with_reg}. The regret of the PNML estimator with regularization of the same data is in Figure \ref{fig:regret_with_reg} 
+We run another simulation in which we generated uniformly 10 random points. Then, least squares estimator with regularization was fitted to the generated data. The regularization weight $lambda$ values where 0, 0.1 and 1.0. The least square estimator with the different regularization terms is shown in Figure \ref{fig:least_squares_with_reg}. The regret of the PNML estimator with regularization of the same data is in Figure \ref{fig:regret_with_reg} 
 
 \begin{figure}[h] 
-\centering\includegraphics[width=0.6\linewidth]{least_sqaures_plot.png}
+\centering\includegraphics[width=0.6\linewidth]{least_squares_plot.png}
 \caption{The fitted least square estimator based on the training set.}
-\label{fig:least_sqaures}
+\label{fig:least_squares}
 \end{figure}
 
 \begin{figure}[h]
@@ -216,9 +216,9 @@ We run another simulation in which we generated uniformly 10 random points. Then
 \end{figure}
 
 \begin{figure}[h] 
-\centering\includegraphics[width=0.6\linewidth]{least_sqaure_with_reg_plot.png}
+\centering\includegraphics[width=0.6\linewidth]{least_squares_with_reg_plot.png}
 \caption{The fitted least squares estimator with regularization.}
-\label{fig:least_sqaures_with_reg}
+\label{fig:least_squares_with_reg}
 \end{figure}
 
 \begin{figure}[h]
