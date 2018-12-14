@@ -1,72 +1,95 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
 
-%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
-%% for a journal layout:
- \documentclass[final,1p,times]{elsarticle}
-% \documentclass[final,1p,times,twocolumn]{elsarticle}
-%% \documentclass[final,3p,times]{elsarticle}
-%% \documentclass[final,3p,times,twocolumn]{elsarticle}
-%% \documentclass[final,5p,times]{elsarticle}
-%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
 
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+
+
+% The following packages can be found on http:\\www.ctan.org
+%\usepackage{graphics} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+%\usepackage{amssymb}  % assumes amsmath package installed
 \usepackage{graphicx}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage{amsmath}
 
 %% Macros
 \def\trainingset{\{x_i,y_i\}_{i=0}^{N-1}}
 \def\pnmlSingle{\max_{\theta} P_\theta (y_N|x_N, z^N)}
 
-\journal{...}
+\title{\LARGE \bf
+Preparation of Papers for IEEE Sponsored Conferences \& Symposia*
+}
+
+%\author{ \parbox{3 in}{\centering Huibert Kwakernaak*
+%         \thanks{*Use the $\backslash$thanks command to put information here}\\
+%         Faculty of Electrical Engineering, Mathematics and Computer Science\\
+%         University of Twente\\
+%         7500 AE Enschede, The Netherlands\\
+%         {\tt\small h.kwakernaak@autsubmit.com}}
+%         \hspace*{ 0.5 in}
+%         \parbox{3 in}{ \centering Pradeep Misra**
+%         \thanks{**The footnote marks may be inserted manually}\\
+%        Department of Electrical Engineering \\
+%         Wright State University\\
+%         Dayton, OH 45435, USA\\
+%         {\tt\small pmisra@cs.wright.edu}}
+%}
+
+\author{Huibert Kwakernaak$^{1}$ and Pradeep Misra$^{2}$% <-this % stops a space
+\thanks{*This work was not supported by any organization}% <-this % stops a space
+\thanks{$^{1}$H. Kwakernaak is with Faculty of Electrical Engineering, Mathematics and Computer Science,
+        University of Twente, 7500 AE Enschede, The Netherlands
+        {\tt\small h.kwakernaak at papercept.net}}%
+\thanks{$^{2}$P. Misra is with the Department of Electrical Engineering, Wright State University,
+        Dayton, OH 45435, USA
+        {\tt\small p.misra at ieee.org}}%
+}
+
+
 \begin{document}
-\begin{frontmatter}
 
-%% Title, authors and addresses
-\title{Predictive Normalized Likelihood for Regression}
 
-%% use the tnoteref command within \title for footnotes;
-%% use the tnotetext command for the associated footnote;
-%% use the fnref command within \author or \address for footnotes;
-%% use the fntext command for the associated footnote;
-%% use the corref command within \author for corresponding author footnotes;
-%% use the cortext command for the associated footnote;
-%% use the ead command for the email address,
-%% and the form \ead[url] for the home page:
-%%
-%% \title{Title\tnoteref{label1}}
-%% \tnotetext[label1]{}
-%% \author{Name\corref{cor1}\fnref{label2}}
-%% \ead{email address}
-%% \ead[url]{home page}
-%% \fntext[label2]{}
-%% \cortext[cor1]{}
-%% \address{Address\fnref{label3}}
-%% \fntext[label3]{}
 
-%% use optional labels to link authors explicitly to addresses:
-%% \author[label1,label2]{<author name>}
-%% \address[label1]{<address>}
-%% \address[label2]{<address>}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-%% Text of abstract
+
+This electronic document is a ÒliveÓ template. The various components of your paper [title, text, heads, etc.] are already defined on the style sheet, as illustrated by the portions given in this document.
 
 \end{abstract}
 
-\begin{keyword}
-Normalized Maximum Likelihood \sep Regression \sep Universal Prediction
-\end{keyword}
 
-\end{frontmatter}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 
 %% main text
 \section{Introduction} \label{Introduction}
 In machine learning the most common tasks are classification and regression. In classification, given train set which consist N pairs $z^N=\{(x_i, y_i)\}_{i=0}^{N-1}$ where $x \in \mathcal{X}$ is the data and $y \in \mathcal{Y}$ are the labels for which $\mathcal{Y}$ is a finite set. The goal is to predict the label $y_N$ of unseen data $x_N$.  The regression task setting are the same as the classification except that the label space $\mathcal{Y}$ is infinite and continuous.
 In the general case we estimate the true probability assignment $P(y_N|x_N)$  with the estimator which based on the train set $q(y_N|x_N, z^N)$ . Using the framework of the information theory field our loss is the log-loss
-\begin{equation*}
+\begin{equation}
 l(q,y_N) = -P(y_N|x_N)\log {q(y_N|x_N})
-\end{equation*}The main settings of the way the pairs $\{x,y\}$ are generated are the stochastic setting and individual settings. In the stochastic setting the data and labels are assumed to be generated from probabilistic source, i.e. there is probabilistic assignment $P_\theta(y|x)$ from a set of estimator class $\theta \in \Theta$ and our goal is to find it. In this paper we assume the scenario of the individual setting in which there is not rule of creating the data and labels. Finding assignment of y given x is impossible and therefore we try to be as good as a Jinni which is a learner who has information about the training set along with the label of the test sample and it is constrained to be one of a class of predictors $\{P_\theta(y_N|x_N,y_N,z^N)\ , \ \theta \in \Theta \}$. The log-loss difference between our learner and the Jinny is known as the regret:
+\end{equation}
+
+The main settings of the way the pairs $\{x,y\}$ are generated are the stochastic setting and individual settings. In the stochastic setting the data and labels are assumed to be generated from probabilistic source, i.e. there is probabilistic assignment $P_\theta(y|x)$ from a set of estimator class $\theta \in \Theta$ and our goal is to find it. In this paper we assume the scenario of the individual setting in which there is not rule of creating the data and labels. Finding assignment of y given x is impossible and therefore we try to be as good as a Genie \cite{feder1992universal} which is a learner who has information about the training set along with the label of the test sample and it is constrained to be one of a class of predictors $\{P_\theta(y_N|x_N,y_N,z^N)\ , \ \theta \in \Theta \}$. The log-loss difference between our learner and the Jinny is known as the regret:
 \begin{equation}
     R(\theta, q, x_N, z^N) = \sum_{y \in \mathcal{Y}} P_\theta(y_N|x_N,y_N,z^N) log \frac{P_\theta(y_N|x_N,y_N,z^N)}{q_(y_N|x_N, z^N)} 
 \end{equation}
@@ -79,7 +102,7 @@ The underline assumption is that the setting of the problem is the stochastic se
 
 In this paper we use the Predictive Normalized Likelihood (PNML). We assume the label of the test data is known, fit a learner to it and predict the assumes label by it. We repeat the process for all possible label. In the end we normalize the probabilities from each label and return the PNML estimator:
 \begin{equation}
-    q_{PNML}(y_N|x_N,z^N)=\frac{\pnmlSingle}{\sum_{y\in \mathcal{Y}} \pnmlSingle}
+q_{PNML}(y_N|x_N,z^N)=\frac{\pnmlSingle}{\sum_{y\in \mathcal{Y}} \pnmlSingle}
 \end{equation}
 The paper outline is as follow:
 section \ref{sec:FormalProblemDef} describes the setting and the goal of the regression problem. In section \ref{sec:PNMLeval} the evaluation of the PNML is presented and analyses. The simulation of the PNML and its regret on estimating polynomial coefficients is shown in section \ref{sec:Simulation} and the conclusion and future work is in section \ref{sec:Conclusion}.
@@ -157,26 +180,28 @@ exp\{-c^2\big(y_N-b\big)^2\} dy_N
 % which is the same as \ref{NormalizationNDim}
 And finally, given a new data sample $x_N$ the PNML of $y_N$ is:
 \begin{equation}
+\begin{split}
 q_{PNML}(y_N)
 &=\frac{1}{\Gamma}\max_{\theta}P_{\theta}(y_N) \\
 &=\frac{1 - x_N^T (XX^T)^{-1} x_N }{\sqrt[]{2\pi\sigma^2}}
 exp\bigg\{-\frac{(1 - x_N^T (XX^T)^{-1} x_N )^2 }{2\sigma^2}\bigg(y_N-x_N^T \theta^*_{N-1} \bigg)^2\bigg\} \\
+\end{split}
 \end{equation}
 
 
 We can also calculate the regret of the PNML which is the log of the normalization factor:
 \begin{equation} \label{eq:regret}
-% \begin{split}
+\begin{split}
 log(\Gamma)
 &=log\left(\frac{1}{1 - x_N^T (XX^T)^{-1} x_N } \right) \\
 &= -log(1 - x_N^T (XX^T)^{-1} x_N) 
-% \end{split}
+\end{split}
 \end{equation}
 
 \section{PNML with Regularization} \label{sec:PNMLwithReg}
 The previous section dealt with the least squares estimator. Here we show the evaluation in case of the least squares with regularization term
 \begin{equation}
-    Loss(X,y)= ||y-X^T \theta||_2 + \lambda ||\theta||_2
+Loss(X,y)= ||y-X^T \theta||_2 + \lambda ||\theta||_2
 \end{equation}
 where $\lambda$ is the regularization term.
 In this case the solution of the estimator is
@@ -189,13 +214,15 @@ Rewrite it in the recursive least square formulation
 \end{equation}
 which is the same as Equation \ref{eq:rls_update}, however, in this case $P_N= (X^T X+ \lambda I)$. The rest of the PNML evaluation stays the same and therefore the normalization factor becomes
 \begin{equation}
-    \Gamma =\frac{1}{1 - x_N^T (XX^T+ \lambda I)^{-1} x_N } 
+\Gamma =\frac{1}{1 - x_N^T (XX^T+ \lambda I)^{-1} x_N } 
 \end{equation}
 and the predictor is 
 \begin{equation}
+\begin{split}
 q_{PNML}(y_N, \lambda)
 &=\frac{1 - x_N^T (XX^T + \lambda I)^{-1} x_N }{\sqrt[]{2\pi\sigma^2}}
 exp\bigg\{-\frac{(1 - x_N^T (XX^T + \lambda I)^{-1} x_N )^2 }{2\sigma^2}\bigg(y_N-x_N^T \theta^*_{N-1} \bigg)^2\bigg\} \\
+\end{split}
 \end{equation}
 
 \section{Simulation} \label{sec:Simulation}
@@ -203,37 +230,78 @@ We run a simulation in which we generated uniformly 5 random points in the inter
 
 We run another simulation in which we generated uniformly 10 random points. Then, least squares estimator with regularization was fitted to the generated data. The regularization weight $lambda$ values where 0, 0.1 and 1.0. The least square estimator with the different regularization terms is shown in Figure \ref{fig:least_squares_with_reg}. The regret of the PNML estimator with regularization of the same data is in Figure \ref{fig:regret_with_reg} 
 
+
+
 \begin{figure}[h] 
-\centering\includegraphics[width=0.6\linewidth]{least_squares_plot.png}
-\caption{The fitted least square estimator based on the training set.}
-\label{fig:least_squares}
+    \centering\includegraphics[width=\linewidth]{least_squares_plot.png}
+    \caption{The fitted least square estimator based on the training set.}
+    \label{fig:least_squares}
 \end{figure}
 
 \begin{figure}[h]
-\centering\includegraphics[width=0.6\linewidth]{regret_plot.png}
-\caption{The regret of the PNML estimator.}
-\label{fig:regret}
+    \centering\includegraphics[width=\linewidth]{regret_plot.png}
+    \caption{The regret of the PNML estimator.}
+    \label{fig:regret}
 \end{figure}
 
 \begin{figure}[h] 
-\centering\includegraphics[width=0.6\linewidth]{least_squares_with_reg_plot.png}
-\caption{The fitted least squares estimator with regularization.}
-\label{fig:least_squares_with_reg}
+    \centering\includegraphics[width=\linewidth]{least_squares_with_reg_plot.png}
+    \caption{The fitted least squares estimator with regularization.}
+    \label{fig:least_squares_with_reg}
 \end{figure}
 
 \begin{figure}[h]
-\centering\includegraphics[width=0.6\linewidth]{regret_with_reg_plot.png}
-\caption{The regret of the PNML estimator with regularization.}
-\label{fig:regret_with_reg}
+    \centering\includegraphics[width=\linewidth]{regret_with_reg_plot.png}
+    \caption{The regret of the PNML estimator with regularization.}
+    \label{fig:regret_with_reg}
 \end{figure}
 
-\section{Conclusion} \label{sec:Conclusion}
-Place holder.
+
+\section{CONCLUSIONS} \label{sec:Conclusion}
+
+A conclusion section is not required. Although a conclusion may review the main points of the paper, do not replicate the abstract as the conclusion. A conclusion might elaborate on the importance of the work or suggest applications and extensions. 
+
+
+\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-\bibliographystyle{model1-num-names}
-\bibliography{references.bib}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{APPENDIX}
+
+Appendixes should appear before the acknowledgment.
+
+\section*{ACKNOWLEDGMENT}
+
+The preferred spelling of the word ÒacknowledgmentÓ in America is without an ÒeÓ after the ÒgÓ. Avoid the stilted expression, ÒOne of us (R. B. G.) thanks . . .Ó  Instead, try ÒR. B. G. thanksÓ. Put sponsor acknowledgments in the unnumbered footnote on the first page.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+References are important to the reader; therefore, each citation must be complete and correct. If at all possible, references should be commonly available publications.
+
+
+\bibliographystyle{ieeetr}
+\bibliography{refrences.bib}
+
+
+
+\end{document}
+
+
+
 
 
 
