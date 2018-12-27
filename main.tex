@@ -41,8 +41,8 @@
 \usepackage{graphicx}
 
 %% Macros
-\def\trainingset{\{x_i,y_i\}_{i=0}^{N-1}}
-\def\pnmlSingle{\max_{\theta} P_\theta (y_N|x_N, z^N)}
+\def\trainingset{\{x_i,y_i\}_{i=1}^{N}}
+\def\pNMLSingle{\max_{\theta} P_\theta (y|x, z^N)}
 
 \interdisplaylinepenalty=2500 % As explained in bare_conf.tex
 
@@ -53,7 +53,8 @@
 
 % ------------------------------------------------------------
 \begin{document}
-\title{Predictive Normalize Likelihood for Least Squares: Toward Better Understanding of Generalization} 
+\title{A New Look to an Old problem: Predictive
+Normalized Likelihood for Least Squares} 
 
 %%% Several authors with up to three affiliations:
 \author{%
@@ -108,7 +109,7 @@
 This work deals with universal prediction under the individual setting in the regression problem. 
 Given a training set and a hypothesis class, our goal is to predict the label of a test sample. 
 Since the data and labels are individual, the objective of universal predictor is to be as good as the best predictor from a given hypothesis class. 
-We use the Predictive Normalized Maximum Likelihood (PNML) scheme, a robust learning solution that also provides an indication for the learnability of a specific test sample based on the training set and hypothesis class. 
+We use the Predictive Normalized Maximum Likelihood (pNML) scheme, a robust learning solution that also provides an indication for the learnability of a specific test sample based on the training set and hypothesis class. 
 We present an analytic solution for the regression problem with least squares hypothesis class and perform an evaluation of the learnable space. 
 We demonstrate our results with a simulation of fitting a polynomial curve to a data with various regularization terms and polynomial degrees.
 \end{abstract}
@@ -116,13 +117,13 @@ We demonstrate our results with a simulation of fitting a polynomial curve to a 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Introduction} \label{Introduction}
-In machine learning, the most common tasks are classification and regression. In classification, given training set which consist N pairs $z^N=\{(x_i, y_i)\}_{i=0}^{N-1}$, where $x \in \mathcal{X}$ is the data and $y \in \mathcal{Y}$ are the labels for which $\mathcal{Y}$ is a finite set, the goal is to predict the label $y_N$ of unseen data $x_N$. 
-The regression task settings are the same as the classification except that the label space $\mathcal{Y}$ is infinite and continuous.
-In order to evaluate the performance of some predictor $q$ on a test sample $(x_N, y_N)$, a loss function  $\mathcal{L}$ is required. Using the framework of the information theory field, we consider the log-loss as the loss function
+In machine learning, the most common tasks are classification and regression. In classification, given training set which consist N pairs $z^N=\{(x_i, y_i)\}_{i=1}^{N}$, where $x \in \mathbf{X}$ is the data and $y \in \mathbf{Y}$ are the labels for which $\mathbf{Y}$ is a finite set, the goal is to predict the label $y$ of unseen data $x$. 
+The regression task settings are the same as the classification except that the label space $\mathbf{Y}$ is infinite and continuous.
+In order to evaluate the performance of some predictor $q$ on a test sample $(x, y)$, a loss function  $\mathcal{L}$ is required. Using the framework of the information theory field, we consider the log-loss as the loss function
 \begin{equation}
-\mathcal{L}(q,x_N,y_N) = -P(y_N|x_N)\log {q(y_N|x_N}),
+\mathcal{L}(q,x,y) = -\log {q(y|x}),
 \end{equation}
-where $P(y_N|x_N)$ is the true probability assignment.
+where $P(y|x)$ is the true probability assignment.
 The best predictor is one who has the minimal loss for all test samples.
 
 The main settings of the way the pairs $\{x,y\}$ are generated are the stochastic, the Probably Approximately Correct (PAC) and individual. 
@@ -135,36 +136,36 @@ The purpose in this setting is to design an algorithm that attains, with very hi
 In this paper, we consider the scenario of the individual setting. 
 In the individual setting the assumption that the data and labels were created by probabilistic mechanism is no longer valid and finding an assignment of y given x is therefore impossible. 
 The goal now becomes to be as good as possible as a learner who has information about the training set along with the label of the test sample. 
-We call this kind of learner a Genie \cite{feder1992universal}. The Genie has some constraints: it is restricted to be a member of a hypothesis class $\{P_\theta(y_N|x_N,y_N,z^N)\ , \ \theta \in \Theta \}$.  
+We call this kind of learner a Genie \cite{feder1992universal}. The Genie has some constraints: it is restricted to be a member of a hypothesis class $\{P_\theta(y|x,y,z^N)\ , \ \theta \in \Theta \}$.  
 In addition, it has no knowledge about which of the sample it is going to be tested on. 
-The log-loss difference between our learner and the Genie is known as the regret
-\begin{multline} \label{eq:genie_regret}
-R(\theta, q, x_N, z^N) = \\ \sum_{y \in \mathcal{Y}} P_\theta(y_N|x_N,y_N,z^N) log \frac{P_\theta(y_N|x_N,y_N,z^N)}{q_(y_N|x_N, z^N)}.
-\end{multline}
+The log-loss difference between our learner and the genie is known as the regret
+\begin{equation} \label{eq:genie_regret}
+R(\Theta, q, x, z^N) = \log \frac{\underset{\theta \in \Theta}{\textit{max }}P_\theta(y|x,y,z^N)}{q_(y|x, z^N)}.
+\end{equation}
 
 % ERM
 The most common approach of generating a leaner is the Empirical Risk Minimization (ERM) \cite{vapnik1992principles}. 
-Given a training set and hypothesis class $\{P_\theta(y|x),\ \theta \in \mathcal{\theta}\}$, a predictor that minimizes the training set error is chosen
+Given a training set and hypothesis class $\{P_\theta(y|x),\ \theta \in \Theta\}$, a predictor that minimizes the training set error is chosen
 \begin{equation}
-Q(y|x) = \min_\theta \frac{1}{N}\sum_{i=0}^{N-1}  l(y_i,P_\theta(y_i|x_i)).
+Q(y|x) = \underset{P_\theta}{\textit{argmin }} \frac{1}{N}\sum_{i=1}^{N}  \mathcal{L}(P_\theta, y_i, x_i).
 \end{equation}
 The underline assumptions of the ERM approach are that data is generates as in the stochastic setting and that the training samples are generated independently.
 
-% PNML
-In this paper we use the Predictive Normalized Likelihood (PNML). The PNML is the solution of the min-max problem of equation \ref{eq:genie_regret} \cite{shtar1987universal}
+% pNML
+In this paper we use the Predictive Normalized Likelihood (pNML). The pNML is the solution of the min-max problem of equation \ref{eq:genie_regret} \cite{shtar1987universal}
 \begin{equation} \label{eq:minmax_prob}
-Q_{\textit{PNML}}(\cdot|x_N,z^N) = \underset{q}{\textit{argmin }}\underset{y_N}{\textit{max }} R(\theta, q, x_N, z^N)
+Q_{\textit{pNML}}(\cdot|x,z^N) = \underset{q}{\textit{argmin }}\underset{y}{\textit{max }} R(\theta, q, x, z^N)
 \end{equation}
 and the solution is 
-\begin{equation} \label{eq:pnml}
-Q_{PNML}(y_N|x_N,z^N)=\frac{\pnmlSingle}{\sum_{y\in \mathcal{Y}} \pnmlSingle}.
+\begin{equation} \label{eq:pNML}
+Q_{pNML}(y|x,z^N)=\frac{\pNMLSingle}{\sum_{y\in \mathbf{Y}} \pNMLSingle}.
 \end{equation}
-In order to obtain the PNML predictor the following procedure is executed:  assuming the label of the test data is known, fit a learner to it and predict the assumed label by it. 
+In order to obtain the pNML learner the following procedure is executed:  assuming the label of the test data is known, fit a learner to it and predict the assumed label by it. 
 Repeat the process for all possible label. 
-In the end, normalize the probabilities from each label and return the PNML predictor.
-The regret of the PNML predictor is its normalization factor
-\begin{equation} \label{eq:pnml_regret}
-R(Q_{\textit{PNML}}, x_N, z^N) = \log \left\{ \sum_{y\in \mathcal{Y}} \pnmlSingle \right\}.
+In the end, normalize the probabilities from each label and return the pNML learner.
+The regret of the pNML learner is its normalization factor
+\begin{equation} \label{eq:pNML_regret}
+R(Q_{\textit{pNML}}, x, z^N) = \log \left\{ \sum_{y\in \mathbf{Y}} \pNMLSingle \right\}.
 \end{equation}
 
 % Least Squares
@@ -173,10 +174,10 @@ In this approach, the overall solution minimizes the sum of the squares of the r
 Recently, the success of Deep Neural Network (DNN) in which the number of learnable parameters is in several order of magnitudes greater than the size of the feature space requires rethinking that assumption.
 
 In summary, this paper provides two main contributions.
-First, we present an analytic solution of the PNML predictor for the least squares hypothesis class. Second, we introduce the learnable space- the space from which if the test data is lied in, a relabel prediction can be made by the PNML predictor. We show that it is indeed possible to learn even when the number of training samples is smaller than the number of features.
+First, we present an analytic solution of the pNML learner for the least squares hypothesis class. Second, we introduce the learnable space- the space from which if the test data is lied in, a relabel prediction can be made by the pNML learner. We show that it is indeed possible to learn even when the number of training samples is smaller than the number of features.
 
 The paper outline is as follows.
-Section \ref{sec:related_works} presents the related. Section \ref{sec:formal_problem_def} introduces the setting and the goal of the regression problem. In section \ref{sec:PNML_eval} the evaluation of the PNML is presented and analyzed. In depth evaluation of the learnable space is shown in section \ref{sec:learnable_space}. The simulation of the PNML and its regret on estimating polynomial coefficients is shown in section \ref{sec:simulation} and the conclusion and future work is in section \ref{sec:conclusion}.
+Section \ref{sec:related_works} presents the related. Section \ref{sec:formal_problem_def} introduces the setting and the goal of the regression problem. In section \ref{sec:pNML_eval} the evaluation of the pNML is presented and analyzed. In depth evaluation of the learnable space is shown in section \ref{sec:learnable_space}. The simulation of the pNML and its regret on estimating polynomial coefficients is shown in section \ref{sec:simulation} and the conclusion and future work is in section \ref{sec:conclusion}.
 
 \section{Related Works} \label{sec:related_works}
 We now provide a brief survey of work in the areas of universal prediction, model generalization and least squares predictions.
@@ -187,7 +188,7 @@ Many works were done in the universal predictions field under a different settin
 \cite{feder1992universal} presents a comprehensive survey of the universal prediction field under various settings: stochastic settings, individual settings and variety of loss functions. 
 \cite{shtar1987universal} showed the min-max solution It is similar to the previous Normalized Maximum Likelihood, which is the solution in the context of on-line prediction of a sequence.  
 \cite{Fogel2017} proposes a min-max universal learning solution that minimizes the worst case log-loss regret in the case of online learning.
-The PNML scheme which solves the min-max problem from equation \ref{eq:minmax_prob} for batch learning in the individual settings is introduced in \cite{Fogel2018}.
+The pNML scheme which solves the min-max problem from equation \ref{eq:minmax_prob} for batch learning in the individual settings is introduced in \cite{Fogel2018}.
 
 \textbf{Model Generalization.} 
 Understating the model generalization capabilities is considered fundamental problem in machine learning  \cite{vapnik2013nature}. 
@@ -197,191 +198,186 @@ For DNN, the VC dimension is linear with the number of parameters \cite{sontag19
 \textbf{Least Squares}
 The least squares algorithm is widely used due to 2 primary reasons: robust performance and simplicity of implementation.
 Recursive least squares is an efficient online method for finding linear predictors minimizing the mean squared error over the training data \cite{hayes19969}.
-So far the least squares for prediction was used in the ERM approach and in Bayesian linear regression \cite{fornalski2015applications}. For the best of our knowledge, there isn't work which use it as hypothesis class for the PNML scheme as we do.
+So far the least squares for prediction was used in the ERM approach and in Bayesian linear regression \cite{fornalski2015applications}. For the best of our knowledge, there isn't work which use it as hypothesis class for the pNML scheme as we do.
 
 \section{Formal Problem Definition} \label{sec:formal_problem_def}
-Given N pairs of data and labels $\{x_i, y_i\}_{i=0}^{N-1}$ where $x_i \in R^M, y\in R$ are deterministic. Our model takes the form:
+Given N pairs of data and labels $\{x_i, y_i\}_{i=1}^{N}$ where $x_i \in R^M, y\in R$ are deterministic. Our model takes the form:
 \begin{equation}
 \begin{split}
-y_0&=x_0^T \theta + e_0 \\
 y_1&=x_1^T \theta + e_1 \\
    &\ \vdots \\
-y_{N-1}&=x_{N-1}^T \theta + e_{N-1} \\
+y_{N}&=x_{N}^T \theta + e_{N} \\
 \end{split}
 \end{equation}
 where $\theta \in R^M$ are the learnable parameters and $e \in R$ is white Gaussian noise with variance of $\sigma$. 
-Our goal is to predict $y_N$ based on a new data sample $x_N$:
+Our goal is to predict $y$ based on a new data sample $x$. 
+$y$ has normal distribution that depends on the learnable parameters $\theta$ 
 \begin{equation}
-y_N = x_N^T \theta + e_N.
-\end{equation}
-In this case $y_N$ has normal distribution that depends on the learnable parameters $\theta$ 
-\begin{equation}
-P_{\theta}(y_N) 
-=\frac{1}{\sqrt[]{2\pi\sigma^2}}exp\left\{-\frac{1}{2\sigma^2}\big(y_N- x_N^T\theta \big)^2\right\}  \\
+P_{\theta}(y) 
+=\frac{1}{\sqrt[]{2\pi\sigma^2}}exp\left\{-\frac{1}{2\sigma^2}\big(y- x^T\theta \big)^2\right\}  \\
 \end{equation}
 We consider the $\theta$ to be a member of hypothesis class $\Theta$, which is the solution of the least squares problem
 \begin{equation} \label{eq:ls_hypotheses_class}
-\Theta := \left\{ \underset{\theta}{\textit{argmin }} \sum_{i=0}^{N-1} | x^T_i \theta - y |^2 \right\}.
+\Theta := \left\{ \underset{\theta}{\textit{argmin }} \sum_{i=1}^{N} | x^T_i \theta - y_i |^2 \right\}.
 \end{equation}
-Denote $\gamma$ as the normalization factor of the PNML predictor
+Denote $\gamma$ as the normalization factor of the pNML learner
 \begin{equation}
-\Gamma=\int_R \max_{\theta \in \Theta} P_\theta(y_N|X^T)dy_N,   
+\Gamma=\int_R \max_{\theta \in \Theta} P_\theta(y|X^T)dy,   
 \end{equation}
-the PNML prediction of $y_N$ given the training set $\{x_i,y_i\}_{i=0}^{N-1}$ and the test sample $x_N$ is
-\begin{equation} \label{eq:pnml_def}
-Q_{\textit{PNML}}(y_N|x_N,z^N) = \frac{1}{\Gamma} \max_{\theta \in \Theta} P_\theta(y_N).
+the pNML prediction of $y$ given the training set $\{(x_i,y_i)\}_{i=1}^{N}$ and the test sample $x$ is
+\begin{equation} \label{eq:pNML_def}
+Q_{\textit{pNML}}(y|x,z^N) = \frac{1}{\Gamma} \max_{\theta \in \Theta} P_\theta(y).
 \end{equation}
-The target is to find the analytic solution of equation \ref{eq:pnml_def} for least squares hypothesis class.
+The target is to find the analytic solution of equation \ref{eq:pNML_def} for least squares hypothesis class.
 
-\section{PNML Evaluation} \label{sec:PNML_eval}
-Using the notations $X \in R^{MxN+1}$ for a matrix which contains all the training set data along with the test sample, $y \in R^{N+1}$ to a vector which contains all the label and $e \in R^{N+1}$ for the noise vector
+\section{PNML Evaluation} \label{sec:pNML_eval}
+Using the notations $X \in R^{M \times N+1}$ for a matrix which contains all the training set data along with the test sample, $Y \in R^{N+1}$ to a vector which contains all the label and $e \in R^{N+1}$ for the noise vector
 \begin{equation}
-X = \begin{bmatrix} x_0 & x_1 & \dots & x_N \end{bmatrix}\ \ 
-y = \begin{bmatrix} y_0 \\ y_1 \\ \vdots \\ y_N \end{bmatrix}\ \
-e = \begin{bmatrix} e_0 \\ e_1 \\ \vdots \\ e_N  \end{bmatrix}.
+X = \begin{bmatrix} x_1 & \dots & x_N & x \end{bmatrix}\ \ 
+Y = \begin{bmatrix} y_1 \\ \vdots \\ y_N \\ y \end{bmatrix}
 \end{equation}
-Assuming that the label of $x_N$ is given ($y_N$ is known), the optimal solution under the mean square error is the least squares estimator:
+Assuming that the label of $x$ is given ($y$ is known), the optimal solution under the mean square error is the least squares estimator:
 \begin{equation}
-\theta ^*_N = (X^T X)^{-1} X y
+\theta ^* = (X^T X)^{-1} X Y
 \end{equation}
 Rewrite it in the recursive least square formulation \cite{hayes19969}:
 \begin{equation} \label{eq:rls_update}
-\theta ^*_N = \theta^*_{N-1} - P_N x_N (y_N - \hat{y}_N)
+\theta ^* = \theta^*_{N} - P_N x (y - \hat{y})
 \end{equation}
-where $\hat{y}_N = x_N^T \theta ^*_{N-1}$ is the ERM predictions based on the samples $\{x_i, y_i\}_{i=0}^{N-1}$ and $P_N$ is the inverse covariance matrix of the data.
+where $\hat{y} = x^T \theta ^*_{N-1}$ is the ERM predictions based on the samples $\{(x_i, y_i)\}_{i=1}^{N}$ and $P_N$ is the inverse covariance matrix of the data.§
 Without loss of generality, $\mu _{X} = 0$ and therefore the inverse covariance matrix becomes the inverse correlation matrix
 \begin{equation}
 P_N = (XX^T)^{-1}. 
 \end{equation}
-The probability distribution of our estimation of $y_N$ can be written as
+The probability distribution of our estimation of $y$ can be written as
 \begin{equation}
 \begin{split}
-&P_{\theta_N ^*}(y_N) 
-=\frac{1}{\sqrt[]{2\pi\sigma^2}}exp\left\{-\frac{1}{2\sigma^2}\big(y_N- x_N^T\theta ^*_N \big)^2\right\} = \\
-& \qquad \frac{1}{\sqrt[]{2\pi\sigma^2}}exp\bigg\{-\frac{1}{2\sigma^2}\big(y_N - x_N^T \big(\theta^*_{N-1} + \\ 
-& \qquad \qquad \qquad \qquad \qquad P_N x_N (y_N -\hat{y}_N) \big) \big)^2\bigg\} = \\
+&P_{\theta_N ^*}(y) 
+=\frac{1}{\sqrt[]{2\pi\sigma^2}}exp\left\{-\frac{1}{2\sigma^2}\big(y- x^T\theta ^* \big)^2\right\} = \\
+& \qquad \frac{1}{\sqrt[]{2\pi\sigma^2}}exp\bigg\{-\frac{1}{2\sigma^2}\big(y - x^T \big(\theta^*_{N} + \\ 
+& \qquad \qquad \qquad \qquad \qquad P_N x (y -\hat{y}) \big) \big)^2\bigg\} = \\
 % =\frac{1}{\sqrt[]{2\pi\sigma^2}}
-% exp\left\{-\frac{1}{2\sigma^2}\left((1-x_N^T P_N x_N)y_N-\hat{y}_N + x_N^T P_N x_N\hat{y}_N \right)^2\right\}  \\
+% exp\left\{-\frac{1}{2\sigma^2}\left((1-x^T P_N x)y-\hat{y} + x^T P_N x\hat{y} \right)^2\right\}  \\
 % =\frac{1}{\sqrt[]{2\pi\sigma^2}}
-% exp\left\{-\frac{1}{2\sigma^2}\left((1-x_N^T P_N x_N)y_N-(1 - x_N^T P_N x_N )\hat{y}_N \right)^2\right\}  \\
+% exp\left\{-\frac{1}{2\sigma^2}\left((1-x^T P_N x)y-(1 - x^T P_N x )\hat{y} \right)^2\right\}  \\
 & \qquad \frac{1}{\sqrt[]{2\pi\sigma^2}}
-exp\left\{-\frac{(1 - x_N^T P_N x_N )^2 }{2\sigma^2}\left(y_N-\hat{y}_N \right)^2\right\}.  \\
+exp\left\{-\frac{(1 - x^T P_N x )^2 }{2\sigma^2}\left(y-\hat{y} \right)^2\right\}.  \\
 \end{split}
 \end{equation}
-Looking back to the PNML normalization factor from equation \ref{eq:pnml_def}
+Looking back to the pNML normalization factor from equation \ref{eq:pNML_def}
 \begin{multline}
-\Gamma = \int_R \max_{\theta} P_\theta(y_N|X^T)dy_N = \\
+\Gamma = \int_R \max_{\theta} P_\theta(y|X^T)dy = \\
 \int_{-\infty}^{\infty} \frac{1}{\sqrt[]{2\pi\sigma^2}}
-\ exp\left\{-\frac{(1 - x_N^T P_N x_N )^2 }{2\sigma^2}
-\left(y_N- \hat{y}_N \right)^2\right\} dy_N\\ 
-=\frac{1}{1 - x_N^T P_N x_N } 
-=\frac{1}{1 - x_N^T (XX^T)^{-1} x_N } \\
+\ exp\left\{-\frac{(1 - x^T P_N x )^2 }{2\sigma^2}
+\left(y- \hat{y} \right)^2\right\} dy\\ 
+=\frac{1}{1 - x^T P_N x } 
+=\frac{1}{1 - x^T (XX^T)^{-1} x } \\
 \end{multline}
-Finally, given a new data sample $x_N$ the PNML of $y_N$ is:
+Finally, given a new data sample $x$ the pNML of $y$ is:
 \begin{multline}
-Q_{PNML}(y_N | x_N, z^N) = \frac{1}{\Gamma}\max_{\theta}P_{\theta}(y_N) = \\
-\frac{1 - x_N^T P_N x_N }{\sqrt[]{2\pi\sigma^2}}
-exp\left\{-\frac{(1 - x_N^T P_N x_N )^2 }{2\sigma^2}\left(y_N-\hat{y}_N \right)^2\right\} \\
+Q_{pNML}(y | x, z^N) = \frac{1}{\Gamma}\max_{\theta}P_{\theta}(y) = \\
+\frac{1 - x^T P_N x }{\sqrt[]{2\pi\sigma^2}}
+exp\left\{-\frac{(1 - x^T P_N x )^2 }{2\sigma^2}\left(y-\hat{y} \right)^2\right\} \\
 \end{multline}
 
-We can also calculate the regret of the PNML. From equation \ref{eq:pnml_regret}, the regret is the log of the PNML normalization factor
+We can also calculate the regret of the pNML. From equation \ref{eq:pNML_regret}, the regret is the log of the pNML normalization factor
 \begin{equation} \label{eq:regret}
-log(\Gamma) = \log\left(\frac{1}{1 - x_N^T (XX^T)^{-1} x_N } \right).
+\log(\Gamma) = \log\left(\frac{1}{1 - x^T (XX^T)^{-1} x } \right).
 \end{equation}
 The regret is associated with the uncertainty of the model prediction of the test sample. It can be seen that it depends on the hypothesis class (the least squares in this case) and on the data.
 
-\section{PNML with Regularization} \label{sec:PNMLwithReg}
+\section{PNML with Regularization} \label{sec:pNMLwithReg}
 The previous section dealt with the least squares predictor hypothesis class. Here we show the evaluation in case of the least squares with Tikhonov regularization 
 \begin{equation}
-\mathcal{L}(z^N)= \sum_{i=0}^{N-1}|y_i-x_i^T \theta|^2 + \lambda ||\theta||_2^2
+\mathcal{L}(z^N)= \sum_{i=1}^{N}|y_i-x_i^T \theta|^2 + \lambda ||\theta||_2^2
 \end{equation}
 where $\lambda$ is the regularization term.
 The hypothesis class is therefore is changed to
 \begin{equation} \label{eq:ls_reg_hypotheses_class}
-\Theta := \left\{ \underset{\theta}{\textit{argmin }} \sum_{i=0}^{N-1} | x^T_i \theta - y |^2 + \lambda ||\theta||_2^2 \right\}.
+\Theta := \left\{ \underset{\theta}{\textit{argmin }} \sum_{i=1}^{N} | x^T_i \theta - y |^2 + \lambda ||\theta||_2^2 \right\}.
 \end{equation}
 In this case the solution of the least squares predictor is
 \begin{equation}
-\theta ^*_N = (X^T X+ \lambda I)^{-1} X y
+\theta ^* = (X^T X+ \lambda I)^{-1} X Y
 \end{equation}
 Rewrite it in the recursive least square formulation 
 \begin{equation}
-\theta ^*_N=\theta^*_{N-1} - P_N x_N (y_N - \hat{y}_N)
+\theta ^*=\theta^*_{N} - P_N x (y - \hat{y})
 \end{equation}
 which is the same as Equation \ref{eq:rls_update}, however, in this case the inverse correlation matrix is 
 \begin{equation}
 P_N= (X^T X+ \lambda I)^{-1}.    
 \end{equation}
-The rest of the PNML evaluation stays the same and therefore the normalization factor becomes
+The rest of the pNML evaluation stays the same and therefore the normalization factor becomes
 \begin{equation}
-\Gamma =\frac{1}{1 - x_N^T (XX^T+ \lambda I)^{-1} x_N } 
+\Gamma =\frac{1}{1 - x^T (XX^T+ \lambda I)^{-1} x } 
 \end{equation}
 and the predictor is 
-\begin{multline} \label{eq:pnml_least_sqaures}
-Q_{PNML}(y_N,x_N, z^N, \lambda)
-=\frac{1 - x_N^T (XX^T + \lambda I)^{-1} x_N }{\sqrt[]{2\pi\sigma^2}} \\
-\cdot exp\left\{-\frac{(1 - x_N^T (XX^T + \lambda I)^{-1} x_N )^2 }{2\sigma^2}\left(y_N- \hat{y}_N \right)^2\right\} \\
+\begin{multline} \label{eq:pNML_least_sqaures}
+Q_{pNML}(y,x, z^N, \lambda)
+=\frac{1 - x^T (XX^T + \lambda I)^{-1} x }{\sqrt[]{2\pi\sigma^2}} \\
+\cdot exp\left\{-\frac{(1 - x^T (XX^T + \lambda I)^{-1} x )^2 }{2\sigma^2}\left(y- \hat{y} \right)^2\right\} \\
 \end{multline}
 The regret of least squares with Tikhonov regularization hypothesis class is
 \begin{equation}
-\log (\Gamma) = \log \left( \frac{1}{1 - x_N^T (XX^T + \lambda I)^{-1} x_N } \right)
+\log (\Gamma) = \log \left( \frac{1}{1 - x^T (XX^T + \lambda I)^{-1} x } \right)
 \end{equation}
 The regularization helps the inversion of the correlation matrix in the case of ill conditions. In the next section we derive the space in which that kind of regularization is needed.
 
 \section{Learnable Space} \label{sec:learnable_space}
 In order to understand for which test sample the trained model generalized well we need to evaluate the regret expression from equation \ref{eq:regret}. High regret means that our model is very far from the Genie and therefore we cannot trust its predictions. Low regret, on the other hand, means the model is as good as a Genie who has the knowledge about the label of the test sample.
 
-Applying the singular value decomposition (SVD) on the training set $[x_0,x_1, \hdots, x_{N-1}] = U \Sigma V^T$ with $U\in R^{MxM}$, where M is the number of features ($x_N \in R^M$) and $\Sigma$ is rectangular diagonal matrix with diagonal values $\{\eta_i\}_{i=0}^{min(M,N)} \ $. The expression $x_N^T(XX^T)^{-1}x_N$ ca be rewritten as follows:
+Applying the singular value decomposition (SVD) on the training set $[x_1,x_2, \hdots, x_{N}] = U \Sigma V^T$ with $U\in R^{M \times M}$, where M is the number of features ($x \in R^M$) and $\Sigma$ is rectangular diagonal matrix and $V \in R^{N \times N}$. The expression $x^T(XX^T)^{-1}x$ ca be rewritten as follows:
 \begin{multline}
-x_N^T(XX^T)^{-1}x_N = \\
-x_N^T\left(\begin{bmatrix} U \Sigma V^T & x_N \end{bmatrix}
+x^T(XX^T)^{-1}x = 
+x^T\left(\begin{bmatrix} U \Sigma V^T & x \end{bmatrix}
 \begin{bmatrix}
-V \Sigma^T U^T \\ x_N^T
+V \Sigma^T U^T \\ x^T
 \end{bmatrix}
-\right)^{-1}x_N \\
-=  x_N^T\left(U \Sigma \Sigma^T U^T + x_N x_N^T\right)^{-1}x_N.
+\right)^{-1}x \\
+=  x^T\left(U \Sigma \Sigma^T U^T + x x^T\right)^{-1}x.
 \end{multline}
-Using Sherman Morrison formula \cite{press2007section}, denote 
+Using Sherman Morrison formula \cite{press2007section}, denote A as empirical correlation matrix of the training set 
 \begin{equation}
-A=U \Sigma \Sigma^T U^T \ \ A^{-1}=U (\Sigma \Sigma^T)^{-1} U^T   
+A=\frac{1}{N} U \Sigma \Sigma^T U^T=U H U^T \ \ A^{-1}=  U H^{-1} U^T   
 \end{equation}
+where H is diagonal matrix with $H_{ii}=\eta_i$.
 Our expression get the following form:
 \begin{equation}
-x_N^T(XX^T)^{-1}x_N = 
-x_N^T \left[ A^{-1} -  \frac{ A x_N x_N^T  A}{1 + x_N^T  A x_N} \right] x_N.
+x^T(XX^T)^{-1}x = 
+x^T \left[ \frac{1}{N}A^{-1} -  \frac{\frac{1}{N^2}A^{-1} x x^T  A^{-1}}{1 + \frac{1}{N} x^T  A^{-1} x} \right] x.
 \end{equation}
-Denote $\gamma = x_N^T  U (\Sigma \Sigma^T)^{-1} U^T x_N$, we can simplify the expression to:
+Denote $\gamma = x^T A^{-1} x$, we can simplify the expression to:
 \begin{equation}
-x_N^T(XX^T)^{-1}x_N = \gamma - \frac{\gamma^2}{1+\gamma} = \frac{\gamma}{1+\gamma}.
+x^T(XX^T)^{-1}x = \frac{1}{N}\gamma - \frac{\frac{1}{N^2}\gamma^2}{1+\frac{1}{N}\gamma} = \frac{\frac{1}{N}\gamma}{1+\frac{1}{N}\gamma}.
 \end{equation}
 Plug in to the regret from equation \ref{eq:regret}:
 \begin{equation}
-\log \Gamma = \log \left( \frac{1}{1-\frac{\gamma}{1+\gamma}} \right)
-=  \log \left( 1+\gamma \right).
+\log \Gamma = \log \left( \frac{1}{1-\frac{\frac{1}{N}\gamma}{1+\frac{1}{N}\gamma}} \right)
+=  \log \left( 1+\frac{1}{N} \gamma \right).
 \end{equation}
-$\gamma$ can be expressed with the projection of $x_N$ on the correlation matrix of the training set:
+$\gamma$ can be expressed with the projection of $x$ on the empirical correlation matrix of the training set:
 \begin{multline}
 \gamma = 
 \begin{bmatrix}
-x_N^T u_0 & \hdots & x_N^T u_M
+x^T u_1 & \hdots & x^T u_M
 \end{bmatrix}
 \begin{bmatrix}
-\frac{1}{\eta_0^2} & \hdots & 0 \\
-0 & \hdots &  0 \\
+\frac{1}{\eta_1} & \hdots & 0 \\
 \vdots & \vdots &  \vdots \\
-0 & \hdots &  \frac{1}{\eta_m^2} \\
+0 & \hdots &  \frac{1}{\eta_M} \\
 \end{bmatrix}
 \begin{bmatrix}
-u_0^T x_N \\ \vdots \\ u_m^T x_N
+u_1^T x \\ \vdots \\ u_M^T x
 \end{bmatrix} \\
-= \sum_{i=0}^M \left(\frac{u_i^T x_N}{\eta_i}\right)^2.
+= \sum_{i=1}^{M} \frac{\left(u_i^T x\right)^2}{\eta_i}.
 \end{multline}
 The final regret expression is
 \begin{equation}
-\log \Gamma = \log \left(1 +  \sum_{i=0}^M \left(\frac{u_i^T x_N}{\eta_i}\right)^2 \right).
+\log \Gamma = \log \left(1 + \frac{1}{N} \sum_{i=0}^{M} \frac{\left(u_i^T x\right)^2 }{\eta_i}\right).
 \end{equation}
 
-$u_i^T x_N$ is the projection of $x_N$ on the i-th dimension of the correlation matrix of the training set. If the test sample $x_N$ lies mostly in the subspace spanned by the eigenvectors with large eigenvalues, then the model can generalize well for it. If the test sample is in the subspace where the eigenvalues are small (or zeros), the regret will be very large and we can deduce that the model prediction is now reliable.
+$u_i^T x$ is the projection of $x$ on the i-th dimension of the correlation matrix of the training set. If the test sample $x$ lies mostly in the subspace spanned by the eigenvectors with large eigenvalues, then the model can generalize well for it. If the test sample is in the subspace where the eigenvalues are small (or zeros), the regret will be very large and we can deduce that the model prediction is now reliable.
 
 \section{Simulation} \label{sec:simulation}
 In this section a  simulation which shows the regret is presented.
@@ -401,7 +397,7 @@ t_0 & t_1 & t_2 \\
 t_0^2 & t_1^2 & t_2^2 
 \end{bmatrix}.
 \end{equation}
-We predict the values of all t values in the interval [-1,1] using equation \ref{eq:pnml_least_sqaures} with regularization terms $\lambda$ of 0, 0.1 and 1.0. 
+We predict the values of all t values in the interval [-1,1] using equation \ref{eq:pNML_least_sqaures} with regularization terms $\lambda$ of 0, 0.1 and 1.0. 
 It is shown in Figure \ref{fig:least_squares_with_reg} (top) that without regularization, the blue curve fits exactly to the data, and as increasing the regularization the curve becomes less steep and tends to fit less to the training data.
 
 Figure \ref{fig:least_squares_with_reg} (bottom) shows the regret from equation \ref{eq:regret} of the 2 degree polynomial prediction of the same points $t_i$. 
@@ -413,7 +409,7 @@ For all regularization terms, the regret values explode as moving away from the 
 \begin{figure}[h] 
     \centering
     \includegraphics[width=\linewidth]{figures/least_sqaures_with_regularization.jpg}
-    \caption{\textbf{Least squares predictor with variety of regularization terms.} (Top) The least squares estimator fitted to the training data (in red) with different values of regularization term. (Bottom) The regret of the PNML predictor from equation \ref{eq:regret} on the interval [-1,1]. The training data t values are marked in red on the x axis.}
+    \caption{\textbf{Least squares predictor with variety of regularization terms.} (Top) The least squares estimator fitted to the training data (in red) with different values of regularization term. (Bottom) The regret of the pNML learner from equation \ref{eq:regret} on the interval [-1,1]. The training data t values are marked in red on the x axis.}
     \label{fig:least_squares_with_reg}
 \end{figure}
 
@@ -431,28 +427,24 @@ t_0^{\textit{Poly Deg}} & t_1^{\textit{Poly Deg}} & t_2^{\textit{Poly Deg}}
 \end{equation}
 Figure \ref{fig:least_squares_with_poly} (top) shows the predicted label for every t value in the interval [-1,1] for the different polynomial degrees. The training set is shown as red dots in this figure. 
 For 3 degree polynomial, the number of features in greater than the size of the training set, however, the prediction in the area of the training set is similar to the prediction of 2 degree polynomial.
-Figure \ref{fig:least_squares_with_poly} (bottom) shows the regret of the 3 PNML predictors. All of the predictors have regrets values that explode as drifting away from the training data, however, within t values of 0 and 0.6, the regret is relatively small and it seems that the prediction is indeed reliable in there.
-
-
-
-
+Figure \ref{fig:least_squares_with_poly} (bottom) shows the regret of the 3 pNML learners. All of the predictors have regrets values that explode as drifting away from the training data, however, within t values of 0 and 0.6, the regret is relatively small and it seems that the prediction is indeed reliable in there.
 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.98\linewidth]{figures/least_sqaures_with_poly_degree.jpg}
-    \caption{\textbf{Least squares predictor with different polynomial degree.} (Top) PNML least squares predictions with different polynomial degrees. (Bottom) The regret of the PNML predictors from equation \ref{eq:regret} on the interval [-1,1]. The training data t values are marked in red on the x axis.}
+    \includegraphics[width=\linewidth]{figures/least_sqaures_with_poly_degree.jpg}
+    \caption{\textbf{Least squares predictor with different polynomial degree.} (Top) pNML least squares predictions with different polynomial degrees. (Bottom) The regret of the pNML learners from equation \ref{eq:regret} on the interval [-1,1]. The training data t values are marked in red on the x axis.}
     \label{fig:least_squares_with_poly}
 \end{figure}
 
 
 \section{Conclusions} \label{sec:conclusion}
 
-In this paper, we have shown an analytic solution for the PNML prediction scheme under the least squares hypothesis class. The mean of that PNML prediction solution is ERM solution, however, using the PNML, training set based uncertainty measure is obtained. In addition, we analyzed the learnable space: the subspace spanned by the eigenvectors with large eigenvalues. If a test sample lies within that space, then the model can generalize well for it. 
+In this paper, we have shown an analytic solution for the pNML prediction scheme under the least squares hypothesis class. The mean of that pNML prediction solution is ERM solution, however, using the pNML, training set based uncertainty measure is obtained. In addition, we analyzed the learnable space: the subspace spanned by the eigenvectors with large eigenvalues. If a test sample lies within that space, then the model can generalize well for it. 
 In addition, we've shown a simulation of least squares prediction with different regularization terms and polynomial degrees the corresponding regret for each one. 
 
 This work suggests a number of potential directions
-for future work. These include: (1) evaluate the PNML predictors for more hypothesis classes. (2) Obtain the learnable space under the PAC and Stochastic setting.
+for future work. These include: (1) evaluate the pNML learners for more hypothesis classes. (2) Obtain the learnable space under the PAC and Stochastic setting.
 
 \newpage
 
