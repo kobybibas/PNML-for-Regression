@@ -124,7 +124,7 @@ We demonstrate the results with a simulation of fitting a polynomial to data wit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Introduction} \label{Introduction}
-Linear regression, using least squares, is probably one of the most standard techniques in statistics \cite{lawson1995solving}. This work provides a new view for this problem based on recent results in universal learning. In particular, the common assumption in linear regression is that the number of training samples needs to be much higher than the number of features in order to be able to generalize \cite{james2013introduction}.
+Linear regression, using least squares, is probably one of the most standard techniques in statistics, \cite{lawson1995solving}. This work provides a new view for this problem based on recent results in universal learning. In particular, the common assumption in linear regression is that the number of training samples needs to be much higher than the number of features in order to be able to generalize \cite{james2013introduction}.
 Recently, the success of Deep Neural Network (DNN) in which the number of learnable parameters is in several order of magnitudes greater than the size of the feature space requires rethinking that assumption. The new view we provide will show that sometimes generalization can be attained even in the ``over-parameterized'' regime.
 
 Before diving into this analysis, a short introduction to universal learning is provided. In the common situation of supervised machine learning, a training set is given consisting of $N$ pairs $z^N=\{(x_i, y_i)\}_{i=1}^{N}$, where $x \in {\cal X}$ is the data or the features and $y \in {\cal Y}$ is the label. Then, a new $x$ is given and the task is to predict its corresponding label $y$. 
@@ -192,11 +192,11 @@ In the linear regression model (\ref{regression_model}), one chooses the least s
 %The underline assumptions of the ERM approach are that data is generates as in the stochastic setting and that the training samples are generated independently.
 
 The paper has two main contributions.
-First, it provides an explicit analytical solution for the pNML learner and its ``learnability'' measure (which is the minmax regret \ref{eq:pNML_regret}) for the linear regression hypothesis class. This includes also the regularized case where the norm of the coefficients vector is constrained. Second, based on the analysis of the learnability measure, it is shown that even in the over-parameterized case where the number of parameters $M$ may be larger than the training size $N$, if the test data comes from a ``learnable space'' successful generalization occurs.
+First, it provides an explicit analytical solution for the pNML learner and its ``learnability'' measure (which is the minmax regret (\ref{eq:pNML_regret})) for the linear regression hypothesis class. This includes also the regularized case where the norm of the coefficients vector is constrained. Second, based on the analysis of the learnability measure, it is shown that even in the over-parameterized case where the number of parameters $M$ may be larger than the training size $N$, if the test data comes from a ``learnable space'' successful generalization occurs.
 This phenomenon may explain why other over-parameterized models such as deep neural networks are successful for ``learnable'' data.
 
 The paper outline is as follows.
-Section \ref{sec:related_works} presents some related work. Section \ref{sec:formal_problem_def} provide the formal problem definition, while the pNML evaluation for the regression problem is given in section \ref{sec:pNML_eval}. In depth analysis of the learnable space is given in section \ref{sec:learnable_space}. Simulation of the pNML and its regret for the problem of fitting a polynomial to the data is described in section \ref{sec:simulation} and conclusion in section \ref{sec:conclusion}.
+Section \ref{sec:related_works} presents some related work. Section \ref{sec:formal_problem_def} provides the formal problem definition, while the pNML evaluation for the regression problem is given in section \ref{sec:pNML_eval} and in section \ref{sec:pNMLwithReg}. In depth analysis of the learnable space is given in section \ref{sec:learnable_space}. Simulation of the pNML and its regret for the problem of fitting a polynomial to the data is described in section \ref{sec:simulation} and conclusion in section \ref{sec:conclusion}.
 
 \section{Related Works} \label{sec:related_works}
 In this section we briefly mention related work on model generalization and least squares regression.
@@ -351,7 +351,7 @@ and the associated regret or the log-normalization factor:
 \begin{equation}
 \log \Gamma (z^N,x) = \log \left( \frac{1}{1 - x^T (XX^T + \lambda I)^{-1} x } \right)
 \end{equation}
-Note that regularization can helpin the case where $XX^T$, the un-normalized correlation matrix of the data is
+Note that regularization can help in the case where $XX^T$, the un-normalized correlation matrix of the data is
 ill conditioned. In the next section we find the ``learnable space'' for the linear regression problem and observe situations where this regularization is needed.
 
 \section{Learnable Space} \label{sec:learnable_space}
@@ -444,7 +444,7 @@ For all regularization terms, the regret values increases as moving away from th
 \begin{figure}[h] 
     \centering
     \includegraphics[width=\linewidth]{figures/least_sqaures_with_regularization.jpg}
-    \caption{\textbf{Least squares predictor with variety of regularization terms.} (Top) The least squares estimator fitted to the training data (in red) with different values of regularization term. (Bottom) The regret of the pNML learner from equation \ref{eq:regret} on the interval [-1,1]. The training data t values are marked in red on the x axis.}
+    \caption{\textbf{Least squares predictor with variety of regularization terms.} (Top) The least squares estimator fitted to the training data (in red) with different values of regularization term. (Bottom) The regret of the pNML learner from (\ref{eq:regret}) on the interval [-1,1]. The training data t values are marked in red on the x axis.}
     \label{fig:least_squares_with_reg}
 \end{figure}
 
@@ -468,19 +468,21 @@ Figure \ref{fig:least_squares_with_poly} (bottom) shows the regret (or learnabil
 \begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figures/least_sqaures_with_poly_degree.jpg}
-    \caption{\textbf{Least squares predictor with different polynomial degree.} (Top) pNML least squares predictions with different polynomial degrees. (Bottom) The regret of the pNML learners from equation \ref{eq:regret} on the interval [-1,1]. The training data t values are marked in red on the x axis.}
+    \caption{\textbf{Least squares predictor with different polynomial degree.} (Top) pNML least squares predictions with different polynomial degrees. (Bottom) The regret of the pNML learners from (\ref{eq:regret}) on the interval [-1,1]. The training data t values are marked in red on the x axis.}
     \label{fig:least_squares_with_poly}
 \end{figure}
 
 
 \section{Conclusions} \label{sec:conclusion}
 
-In this paper, we provided an analytic solution of the pNML universal learning scheme for the linear regression hypothesis class. 
-%The mean of that pNML prediction solution is ERM solution, however, using the pNML, training set based uncertainty measure is obtained.
-In addition, we observed the learnable space: if a test sample lies in the subspace spanned by the eigenvectors with large eigenvalues of the empirical correlation matrix then the learner can generalize well. 
+In this paper, we provided an explicit analytical solution of the pNML universal learning scheme and its learnability measure for the linear regression hypothesis class. 
+Interestingly, the predicted universal pNML assignment is Gaussian with a mean that is equal to that of the ERM, but with a variance that increases by a factor $\Gamma$ whose logarithm is the learnability measure.
+Analyzing $\Gamma$ we can observe the ``learnability space'' for this problem. Specifically, 
+if a test sample mostly lies in the subspace spanned by the eigenvectors associated with large eigenvalues of the empirical correlation matrix then the learner can generalize well, even in an over-parameterized case where the regression dimension is larger than the number of training samples. 
 Finally, we have provided a simulation of the pNML least squares prediction for polynomial interpolation with different regularization factors and polynomial degrees. 
 
-%This work suggests a number of potential directions for future work. These include: (1) evaluate the pNML learners for more hypothesis classes. (2) Obtain the learnable space under the PAC and Stochastic setting.
+This work suggests a number of potential directions for future work, some are already explored in an accompanying paper \cite{pNML_neural_networks}. We conjecture that as in linear regression other ``over-parameterized'' model classes are learnable at least locally at some learnable space, that can be inferred from the pNML solution. This notion is indeed corroborated by the findings in \cite{pNML_neural_networks}.
+%These include: (1) evaluate the pNML learners for more hypothesis classes. (2) Obtain the learnable space under the PAC and Stochastic setting.
 
 
 
