@@ -20,7 +20,7 @@
 %%%%%%
 %% Packages:
 %% Some useful packages (and compatibility issues with the IEEE format)
-%% are pointed out at the very end of this template source file (they are 
+%% are pointed out at the very end of this template source file (they are https://www.overleaf.com/5925174675mmtrqctdffvj
 %% taken verbatim out of bare_conf.tex by Michael Shell).
 %
 % *** Do not adjust lengths that control margins, column widths, etc. ***
@@ -198,12 +198,12 @@ h_{ii}=x_i^T(XX^T)x_i
 where $X$ is the correlation matrix of the training set and $x_i$ is the feature value which is examined.
 If the leverage value $h_{ii}$ of observation is large, the observation is considered as an outlier.
 Using the pNML, we fit a learner assuming the label of the test sample is known. 
-Therefore, testing wheater it is an outlier can produce prediction confidence.
-In section \ref{sec:pNML_eval}, we get analyticly similar expression to the leverage measure.
+Therefore, testing whether it is an outlier can produce prediction confidence.
+In section \ref{sec:pNML_eval}, we get analytically similar expression to the leverage measure.
 
 Another approach for finding the reliability of the prediction is to compose confidence intervals \cite{trevor2009elements}.
 Confidence intervals are a pointwise measure that is sensitive to the variability of the features and sample size.
-Denote $\hat{y}$ as the predicted value of $x$ and  $\hat{\sigma}^2$ as the empirical error of the prediction, under the assumption of sthocastic i.i.d data and existence of white noise, a confidence interval convergences is distribution to
+Denote $\hat{y}$ as the predicted value of $x$ and  $\hat{\sigma}^2$ as the empirical error of the prediction, under the assumption of stochastic i.i.d data and existence of white noise, a confidence interval convergences is distribution to
 \begin{equation}
 (\hat{y} - y) \xrightarrow{} \mathcal{N}(0, \hat{\sigma}^2 x^T(XX^T)^{-1}x)
 \end{equation}
@@ -232,18 +232,18 @@ The unknown parameter vector $\theta$ belongs to a set $\Theta$, which in the ge
 In the next section, the pNML will be evaluated for this hypotheses class. 
 Recall that the pNML learner of $y$ given the the test sample $x$ and the training set $z^N=\{(x_i,y_i)\}_{i=1}^{N}$ is given by:
 \begin{equation} \label{eq:pNML_def}
-q_{\mbox{\tiny{pNML}}}(y|x;z^N) = \frac{1}{\kappa} p_{\hat{\theta}(z^N;x,y)}(y|x).
+q_{\mbox{\tiny{pNML}}}(y|x;z^N) = \frac{1}{K} p_{\hat{\theta}(z^N;x,y)}(y|x).
 \end{equation}
 where in the linear regression case 
 \begin{align}
 \hat{\theta}(z^N,x,y)= \arg\min_{\theta\in\Theta} \left[ \sum_{i=1}^N \left(y_i - x_i^T\theta \right)^2 + \left(y-x^T\theta\right)^2 \right]
 \end{align}
-and where  $\kappa$ is the the normalization factor:
+and where  $K$ is the the normalization factor:
 \begin{equation} \label{gamma}
-\kappa = R^*(z^N,x) = \int_R  p_{\hat{\theta}(z^N;x,y)}(y|x)dy,   
+K = R^*(z^N,x) = \int_R  p_{\hat{\theta}(z^N;x,y)}(y|x)dy,   
 \end{equation}
 
-The goal is to find an analytic expression for (\ref{eq:pNML_def}) and for the learnability measure $\Gamma = \log \kappa$, the minmax regret value.
+The goal is to find an analytic expression for (\ref{eq:pNML_def}) and for the learnability measure $\Gamma = \log K$, the minmax regret value.
 
 
 \section{pNML Evaluation} \label{sec:pNML_eval}
@@ -279,7 +279,7 @@ Now,
 \end{equation}
 To get the pNML normalization factor (\ref{gamma}), we integrate over all possible labels
 \begin{multline}
-\kappa = %\int_R \max_{\theta} P_\theta(y|X^T)dy = \\
+K = %\int_R \max_{\theta} P_\theta(y|X^T)dy = \\
 \int_{-\infty}^{\infty} \frac{1}{\sqrt[]{2\pi\sigma^2}}
 \ exp\left\{-\frac{(1 - x^T P_{N+1} x )^2 }{2\sigma^2}
 \left(y- \hat{y} \right)^2\right\} dy\\ 
@@ -288,13 +288,13 @@ To get the pNML normalization factor (\ref{gamma}), we integrate over all possib
 \end{multline}
 Thus, the pNML distribution of $y$ given $x$ is:
 \begin{multline}
-q_{\mbox{\tiny{pNML}}}(y | x; z^N) = \frac{1}{\kappa}p_{\theta_{N+1}^*}(y|x) = \\
+q_{\mbox{\tiny{pNML}}}(y | x; z^N) = \frac{1}{K}p_{\theta_{N+1}^*}(y|x) = \\
 \frac{1 - x^T P_{N+1} x }{\sqrt[]{2\pi\sigma^2}}
 \exp\left\{-\frac{(1 - x^T P_{N+1} x )^2 }{2\sigma^2}\left(y-\hat{y} \right)^2\right\} \\
 \end{multline}
 and its associate learnability measure or regret:
 \begin{equation} \label{eq:regret}
-\Gamma = \log \kappa = \log\left(\frac{1}{1 - x^T (XX^T)^{-1} x } \right).
+\Gamma = \log K = \log\left(\frac{1}{1 - x^T (XX^T)^{-1} x } \right).
 \end{equation}
 
 % -------------------------
@@ -327,7 +327,7 @@ q_{\mbox{\tiny{pNML}}}(y|x; z^N, \lambda)
 \end{multline}
 and the associated regret or the log-normalization factor:
 \begin{equation}
-\Gamma = \log \kappa = \log \left( \frac{1}{1 - x^T (XX^T + \lambda I)^{-1} x } \right)
+\Gamma = \log K = \log \left( \frac{1}{1 - x^T (XX^T + \lambda I)^{-1} x } \right)
 \end{equation}
 Note that regularization can help in the case where $XX^T$, the un-normalized correlation matrix of the data is
 ill conditioned. 
@@ -370,7 +370,7 @@ x^T(XX^T)^{-1}x = \frac{1}{N}\gamma - \frac{\frac{1}{N^2}\gamma^2}{1+\frac{1}{N}
 \end{equation}
 Plugging in the regret formula (\ref{eq:regret}):
 \begin{equation}
-\Gamma = \log \kappa = \log \left( \frac{1}{1-\frac{\frac{1}{N}\gamma}{1+\frac{1}{N}\gamma}} \right)
+\Gamma = \log K = \log \left( \frac{1}{1-\frac{\frac{1}{N}\gamma}{1+\frac{1}{N}\gamma}} \right)
 =  \log \left( 1+\frac{1}{N} \gamma \right).
 \end{equation}
 Let $u_i$ be the eigenvectors of the empirical correlation matrix of the training data. 
@@ -392,7 +392,7 @@ u_1^T x \\ \vdots \\ u_M^T x
 \end{multline}
 The final regret expression is thus:
 \begin{equation}
-\Gamma = \log \kappa = \log \left(1 + \frac{1}{N} \sum_{i=0}^{M} \frac{\left(x^Tu_i\right)^2 }{\eta_i}\right).
+\Gamma = \log K = \log \left(1 + \frac{1}{N} \sum_{i=0}^{M} \frac{\left(x^Tu_i\right)^2 }{\eta_i}\right).
 \end{equation}
 If the test sample $x$ lies mostly in the subspace spanned by the eigenvectors with large eigenvalues, then the model can generalize well even if $M>N$.
 
@@ -461,21 +461,14 @@ All the learners have regret values that are small near the training samples and
 \section{Conclusions} \label{sec:conclusion}
 
 In this paper, we provided an explicit analytical solution of the pNML universal learning scheme and its learnability measure for the linear regression hypothesis class. 
-Interestingly, the predicted universal pNML assignment is Gaussian with a mean that is equal to that of the ERM, but with a variance that increases by a factor $\kappa$ whose logarithm is the learnability measure $\Gamma$.
+Interestingly, the predicted universal pNML assignment is Gaussian with a mean that is equal to that of the ERM, but with a variance that increases by a factor $K$ whose logarithm is the learnability measure $\Gamma$.
 Analyzing $\Gamma$ we can observe the ``learnability space'' for this problem. 
 Specifically, if a test sample mostly lies in the subspace spanned by the eigenvectors associated with large eigenvalues of the empirical correlation matrix then the learner can generalize well, even in an over-parameterized case where the regression dimension is larger than the number of training samples.
-Finally, we provided a simulation of the pNML least squares prediction for polynomial interpolation.% with different regularization factors and polynomial degrees. 
-% Finally, we have provided a simulation of the pNML least squares prediction for polynomial interpolation with different regularization factors and polynomial degrees. 
+Finally, we provided a simulation of the pNML least squares prediction for polynomial interpolation.
 
 This work suggests a number of potential directions for future work, some are already explored in an accompanying paper \cite{pNML_neural_networks}. 
 We conjecture that as in linear regression other ``over-parameterized'' model classes are learnable at least locally, that can be inferred from the pNML solution. 
 This notion is indeed corroborated by the findings in \cite{pNML_neural_networks}.
-%These include: (1) evaluate the pNML learners for more hypothesis classes. (2) Obtain the learnable space under the PAC and Stochastic setting.
-
-% This work suggests a number of potential directions for future work, some are already explored in an accompanying paper \cite{pNML_neural_networks}. 
-% We conjecture that as in linear regression other ``over-parameterized'' model classes are learnable at least locally at some learnable space, that can be inferred from the pNML solution. 
-% This notion is indeed corroborated by the% findings in \cite{pNML_neural_networks}.
-%These include: (1) evaluate the pNML learners for more hypothesis classes. (2) Obtain the learnable space under the PAC and Stochastic setting.
 
 
 
