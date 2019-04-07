@@ -74,31 +74,6 @@
 }
 
 
-%%% Many authors with many affiliations:
-% \author{%
-%   \IEEEauthorblockN{Albus Dumbledore\IEEEauthorrefmark{1},
-%                     Olympe Maxime\IEEEauthorrefmark{2},
-%                     Stefan M.~Moser\IEEEauthorrefmark{3}\IEEEauthorrefmark{4},
-%                     and Harry Potter\IEEEauthorrefmark{1}}
-%   \IEEEauthorblockA{\IEEEauthorrefmark{1}%
-%                     Hogwarts School of Witchcraft and Wizardry,
-%                     1714 Hogsmeade, Scotland,
-%                     \{dumbledore, potter\}@hogwarts.edu}
-%   \IEEEauthorblockA{\IEEEauthorrefmark{2}%
-%                     Beauxbatons Academy of Magic,
-%                     1290 Pyrénées, France,
-%                     maxime@beauxbatons.edu}
-%   \IEEEauthorblockA{\IEEEauthorrefmark{3}%
-%                     ETH Zürich, ISI (D-ITET), ETH Zentrum, 
-%                     CH-8092 Zürich, Switzerland,
-%                     moser@isi.ee.ethz.ch}
-%   \IEEEauthorblockA{\IEEEauthorrefmark{4}%
-%                     National Chiao Tung University (NCTU), 
-%                     Hsinchu, Taiwan,
-%                     moser@isi.ee.ethz.ch}
-% }
-
-
 \maketitle
 
 %%%%%%
@@ -114,18 +89,18 @@
 Linear regression is a classical paradigm in statistics. 
 A new look at it is provided via the lens of universal learning.
 In applying universal learning to linear regression the hypotheses class represents the label $y\in {\cal R}$ as a linear combination of the feature vector $x^T\theta$ where $x\in {\cal R}^M$, within a Gaussian error.
-The 
-Predictive Normalized Maximum Likelihood (pNML) solution for universal learning of individual data can be expressed analytically in this case, as well as its associated learnability measure. 
-%{\normalsize }The pNML is not only a robust learning scheme but also provides a learnability measure for the specific test sample and the specific training set, for a given hypothesis class. 
-Interestingly, the situation where the number of parameters $M$ may even be larger than the number of training samples $N$ can be examined. As expected, in this case learnability cannot be attained in every situation; nevertheless, if the test vector resides mostly in a subspace spanned by the eigenvectors associated with the large eigenvalues of the empirical correlation matrix of the training data, linear regression can generalize despite the fact that it uses an ``over-parametrized'' model. 
+The Predictive Normalized Maximum Likelihood (pNML) solution for universal learning of individual data can be expressed analytically in this case, as well as its associated learnability measure. 
+Interestingly, the situation where the number of parameters $M$ may even be larger than the number of training samples $N$ can be examined. 
+As expected, in this case learnability cannot be attained in every situation; nevertheless, if the test vector resides mostly in a subspace spanned by the eigenvectors associated with the large eigenvalues of the empirical correlation matrix of the training data, linear regression can generalize despite the fact that it uses an ``over-parametrized'' model. 
 We demonstrate the results with a simulation of fitting a polynomial to data with a possibly large polynomial degree.
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Introduction} \label{Introduction}
-Linear regression, using least squares, is probably one of the most standard techniques in statistics, \cite{lawson1995solving}. This work provides a new view for this problem based on recent results in universal learning. In particular, the common assumption in linear regression is that the number of training samples needs to be much higher than the number of features in order to be able to generalize \cite{james2013introduction}.
-Recently, the success of Deep Neural Network (DNN) in which the number of learnable parameters is in several order of magnitudes greater than the size of the feature space requires rethinking that assumption. The new view we provide will show that sometimes generalization can be attained even in the ``over-parameterized'' regime.
+Linear regression, using least squares, is probably one of the most standard techniques in statistics, \cite{lawson1995solving}. This work provides a new view of this problem based on recent results in universal learning. In particular, the common assumption in linear regression is that the number of training samples needs to be much higher than the number of features in order to be able to generalize \cite{james2013introduction}.
+Recently, the success of Deep Neural Networks (DNNs) in which the number of learnable parameters is in several orders of magnitudes greater than the size of the feature space requires rethinking that assumption. 
+The new view we provide will show that sometimes generalization can be attained even in the ``over-parameterized'' regime.
 
 Before diving into this analysis, a short introduction to universal learning is provided. In the common situation of supervised machine learning, a training set is given consisting of $N$ pairs $z^N=\{(x_i, y_i)\}_{i=1}^{N}$, where $x \in {\cal X}$ is the data or the features and $y \in {\cal Y}$ is the label. Then, a new $x$ is given and the task is to predict its corresponding label $y$. 
 In the information theoretic framework considered in a variety of works, e.g., \cite{universal_prediction} and more recently \cite{FogelFeder2018}, prediction is done by assigning a probability distribution $q(\cdot|x)$ to the unknown label, and the prediction loss is the log-loss:
@@ -134,18 +109,17 @@ In the information theoretic framework considered in a variety of works, e.g., \
 \end{equation}
 Clearly a reasonable goal is to find the predictor $q$ with the minimal loss for the test sample. However, this problem is ill-posed unless additional assumptions are made.
 
-First, a ``model'' class, or `hypotheses'' class must be defined. This class is 
-a set of conditional probability distributions
+First, a ``model'' class, or `hypotheses'' class must be defined. 
+This class is a set of conditional probability distributions
 \begin{align} P_\Theta = \{ p_\theta(y|x),\;\;\theta\in\Theta\} \end{align} 
-where $\Theta$ is a general index set. This is equivalent to saying that there is a set of stochastic functions  $\{ y=g_\theta(x),\;\;\theta\in\Theta\}$ used to explain the relation between $x$ and $y$.
+where $\Theta$ is a general index set. 
+This is equivalent to saying that there is a set of stochastic functions  $\{ y=g_\theta(x),\;\;\theta\in\Theta\}$ used to explain the relation between $x$ and $y$.
 
-Next, assumptions must be made on how the data and the labels are generated. In the stochastic setting it is assumed that
-%the data and labels are generated from a probabilistic source, i.e. there is probabilistic assignment $P_\theta(y|x)$ from a set of hypothesis class $\theta \in \Theta$
-there is a true probabilistic relation between $x$ and $y$ given by an (unknown) model from the class $P_\Theta$. 
-A more general setting, used in the variety of works in machine learning, is the 
-%of the way the pairs $\{x,y\}$ are generated are the stochastic, the 
-Probably Approximately Correct (PAC) established in  \cite{valiant1984theory}. In PAC
-$x$ and $y$ are assumed to be generated by some source $P(x,y)=P(x)P(y|x)$, but unlike the stochastic setting $P(y|x)$ is not necessarily a member of the hypothesis class. In both the stochastic and PAC settings the goal is to perform as well as a learner that knows the true probability.
+Next, assumptions must be made on how the data and the labels are generated. 
+In the stochastic setting, it is assumed that there is a true probabilistic relation between $x$ and $y$ given by an (unknown) model from the class $P_\Theta$. 
+A more general setting, used in the variety of works in machine learning, is the Probably Approximately Correct (PAC) established in  \cite{valiant1984theory}. 
+In PAC $x$ and $y$ are assumed to be generated by some source $P(x,y)=P(x)P(y|x)$, but unlike the standard stochastic setting $P(y|x)$ is not necessarily a member of the hypothesis class. 
+In both the stochastic and PAC settings the goal is to perform as well as a learner that knows the true probability.
 
 The most general setting, however, and the one used in this paper is 
 the individual, where the data and labels of both the training and test are specific and individual.
@@ -164,9 +138,9 @@ Following \cite{shtar1987universal} this learner, called the Predictive Normaliz
 \begin{equation} \label{eq:pNML}
 q_{\mbox{\tiny{pNML}}}(y|x;z^N)=\frac{\pNMLSingle}{\sum_{y\in {\cal Y}} \pNMLSingle}.
 \end{equation}
-This pNML probability assignment was essentially proposed earlier, see \cite{roos2008sequentially,roos2008bayesian}, as one of the possible variations of the Normalized Maximum Likelihood (NML) method of \cite{shtar1987universal} for universal prediction.
+Note that this pNML probability assignment was essentially proposed earlier, see \cite{roos2008sequentially,roos2008bayesian}, with a different motivation as one of the possible variations of the Normalized Maximum Likelihood (NML) method of \cite{shtar1987universal} for universal prediction.
 
-In order to obtain the pNML the following procedure is executed: assuming the label of the test data is known. Find the best model that fits it with the training samples, and predict the assumed label by it. 
+In order to obtain the pNML the following procedure is executed: assuming the label of the test data is known, find the best model that fits it with the training samples, and predict the assumed label by it. 
 Repeat the process for all possible labels. 
 Then, normalize to get a valid probability distribution which is the pNML learner.
 The regret of the pNML, $R^*(z^N,x)$ is the logarithm of its normalization factor
@@ -174,7 +148,7 @@ The regret of the pNML, $R^*(z^N,x)$ is the logarithm of its normalization facto
 R^*(z^N,x) = \log \left\{ \sum_{y\in {\cal Y}} \pNMLSingle \right\}.
 \end{equation}
 
-In considering linear regression, $y\in {\cal R}$ is the scalar label, $x\in {\cal R}^M$ is the feature vector (sometimes the first compnent of $x$ is set to $1$ to formulate affine linear relation), and the model class is the set:
+In considering linear regression, $y\in {\cal R}$ is the scalar label, $x\in {\cal R}^M$ is the feature vector (sometimes the first component of $x$ is set to $1$ to formulate affine linear relation), and the model class is the set:
 \begin{equation} \label{regression_model}
 \left\{ p_{\theta}(y|x) 
 =\frac{1}{\sqrt[]{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}\big(y- x^T\theta \big)^2\right\}, \;\; \theta \in {\cal R}^M \right\} 
@@ -183,46 +157,63 @@ That is, the label $y$ is a linear combination of the components of $x$, within 
 
 % ERM
 The pNML approach deviates from the standard Empirical Risk Minimization (ERM) \cite{vapnik1992principles} approach.
-%  the Empirical Risk Minimization (ERM) \cite{vapnik1992principles}. 
 In ERM, given a training set and hypothesis class $\{p_\theta(y|x),\ \theta \in \Theta\}$, a learner that minimizes the loss over the training set is chosen:
 \begin{equation}
 q_{\mbox{\tiny{ERM}}}(y|x) = \underset{p_\theta}{\textit{argmin }} \frac{1}{N}\sum_{i=1}^{N}  \mathcal{L}(p_\theta; x_i, y_i).
 \end{equation}
-In the linear regression model (\ref{regression_model}), one chooses the least squares solution over the training set for the linear coefficients. This, however, may lead to large generalization log-loss error.
-%The underline assumptions of the ERM approach are that data is generates as in the stochastic setting and that the training samples are generated independently.
+In the linear regression model (\ref{regression_model}), one chooses the least squares solution over the training set for the linear coefficients. 
+This, however, may lead to large generalization log-loss error.
 
 The paper has two main contributions.
 First, it provides an explicit analytical solution for the pNML learner and its ``learnability'' measure (which is the minmax regret (\ref{eq:pNML_regret})) for the linear regression hypothesis class. This includes also the regularized case where the norm of the coefficients vector is constrained. Second, based on the analysis of the learnability measure, it is shown that even in the over-parameterized case where the number of parameters $M$ may be larger than the training size $N$, if the test data comes from a ``learnable space'' successful generalization occurs.
 This phenomenon may explain why other over-parameterized models such as deep neural networks are successful for ``learnable'' data.
 
 The paper outline is as follows.
-Section \ref{sec:related_works} presents some related work. Section \ref{sec:formal_problem_def} provides the formal problem definition, while the pNML evaluation for the regression problem is given in section \ref{sec:pNML_eval} and in section \ref{sec:pNMLwithReg}. In depth analysis of the learnable space is given in section \ref{sec:learnable_space}. Simulation of the pNML and its regret for the problem of fitting a polynomial to the data is described in section \ref{sec:simulation} and conclusion in section \ref{sec:conclusion}.
+Section \ref{sec:related_works} presents some related work. 
+Section \ref{sec:formal_problem_def} provides the formal problem definition, while the pNML evaluation for the regression problem is given in sections \ref{sec:pNML_eval} and \ref{sec:pNMLwithReg}. 
+In-depth analysis of the learnable space is given in section \ref{sec:learnable_space}. 
+Simulation of the pNML and its regret for the problem of fitting a polynomial to data is described in section \ref{sec:simulation} and the conclusions are in section \ref{sec:conclusion}.
 
 \section{Related Works} \label{sec:related_works}
-In this section we briefly mention related work on model generalization and least squares regression.
-
-
-%\textbf{Universal Prediction and Online Learning.}
-%On-line learning is the case where prediction is done in an on-line fashion on a sequence of test data, accumulated the loss and continues after the corresponding label is revealed. This problem is an extension of the well studied work on universal prediction, see the comprehensive survey \cite{universal_prediction}, which is essentially an online learning but with no $x$'s. As described in \cite{universal_prediction}, the universal prediction solution with log-loss provides a ``universal probability'' for the entire sequence, i.e., $q(y^N)$, which can be converted to a sequential prediction strategy via the chain rule $q(y^N)=\prod_{t=1}^N q(y_t|y^{t-1})$. The universal probability is given by either a Bayesian mixture $q(y^N) = \int_\Theta w(\theta) p_\theta (y^N)$ (in the stochastic setting) or by the normalized maximum likelihood (NML), $q_{\mbox{\tiny{NML}}}(y^N) = \frac{\max_{\theta} p_{\theta}(y^N)}{\sum_{\tilde{y}^N}\max_{\theta} p_{\theta}(\tilde{y}^N)}$,  \cite{shtar1987universal}, (in the individual setting). Both solutions solve a corresponding minmax problem. So universal prediction is well understood.
-
-%Online learning, with a feature sequence $x^N$ is less understood as it has one important difference: the chain rule does not hold for conditional probabilities. Yet in \cite{Fogel2017} a universal learning solution is proposed, which is close to the optimal solution for certain classes of models.
-
+In this section, we briefly mention related works on model generalization, least squares regression and the confidence of the least squares predictions.
 
 \textbf{Model Generalization.} 
-Understating the model generalization capabilities is considered fundamental problem in machine learning  \cite{vapnik2013nature}. 
+Understating the model generalization capabilities is considered a fundamental problem in machine learning  \cite{vapnik2013nature}. 
 As noted, most of the theoretical work in learning use the PAC setting. In that setting, a common measure is the VC Dimension that can be used to upper bound on the test generalization error.
-For DNN's, the VC dimension is linear with the number of parameters \cite{sontag1998vc}, yet the empirical evidence demonstrates that DNN's have state of the art generalization performance. This makes the VC dimension irrelevant for assessing the generalization error of DNN's.
+For DNNs, the VC dimension is linear with the number of parameters \cite{sontag1998vc}, yet the empirical evidence demonstrates that DNN's have state of the art generalization performance. This makes the VC dimension irrelevant for assessing the generalization error of DNNs.
 
-\textbf{Least Squares}
+\textbf{Least Squares.}
 The least squares algorithm is widely used in linear regression due to its robust performance and simplicity of implementation.
-In addition to the explicit formula for its solution, it can be solved sequentially, via a recursive algorithm.
-Indeed the Recursive Least Squares (RLS) is an efficient online method for finding the linear predictor that minimizes the squared error over the training data \cite{hayes19969}.
-In learning linear regression models, the least squares is used for prediction in the ERM approach and in a Bayesian linear regression \cite{fornalski2015applications}. 
-The analysis in the individual setting, in the realm of the pNML approach, is a novel.
-% contribution of this paper.
+In addition to the explicit formula for its solution, it can be solved sequentially, via the Recursive Least Squares (RLS) algorithm, which is an efficient online method for finding the linear predictor that minimizes the squared error over the training data \cite{hayes19969}.
+In learning field, the least squares estimator is used for prediction in both ERM and Bayesian approaches \cite{fornalski2015applications}. 
+This paper provides an analysis in the individual setting, in the realm of the pNML approach.
 
+\textbf{Outliers detection and confidence.}
+In order to evaluate a pointwise confidence measure for linear regression, several methods were proposed. 
+Leverage values are employed to identify outliers with respect to their feature values \cite{cardinali2013observation}. 
+A leverage value is a measure of the distance between an observation and the center of the data
+\begin{equation}
+h_{ii}=x_i^T(XX^T)x_i
+\end{equation}
+where $X$ is the correlation matrix of the training set and $x_i$ is the feature value which is examined.
+If the leverage value $h_{ii}$ of observation is large, the observation is considered as an outlier.
+Using the pNML, we fit a learner assuming the label of the test sample is known. 
+Therefore, testing wheater it is an outlier can produce prediction confidence.
+In section \ref{sec:pNML_eval}, we get analyticly similar expression to the leverage measure.
+
+Another approach for finding the reliability of the prediction is to compose confidence intervals \cite{trevor2009elements}.
+Confidence intervals are a pointwise measure that is sensitive to the variability of the features and sample size.
+Denote $\hat{y}$ as the predicted value of $x$ and  $\hat{\sigma}^2$ as the empirical error of the prediction, under the assumption of sthocastic i.i.d data and existence of white noise, a confidence interval convergences is distribution to
+\begin{equation}
+(\hat{y} - y) \xrightarrow{} \mathcal{N}(0, \hat{\sigma}^2 x^T(XX^T)^{-1}x)
+\end{equation}
+
+
+% ----------------------------------------------
+% Linear Regression: Formal Problem Definition
+% ----------------------------------------------
 \section{Linear Regression: Formal Problem Definition} \label{sec:formal_problem_def}
-Given N pairs of data and labels $\{x_i, y_i\}_{i=1}^{N}$ where $x_i \in R^M, y\in R$ are deterministic. The model takes the form:
+Given N pairs of data and labels $\{x_i, y_i\}_{i=1}^{N}$ where $x_i \in R^M, y\in R$ are deterministic, the model takes the form:
 \begin{equation}
 \begin{split}
 y_1&=x_1^T \theta + e_1 \\
@@ -232,33 +223,32 @@ y_{N}&=x_{N}^T \theta + e_{N} \\
 \end{equation}
 where $\theta \in R^M$ are the learnable parameters and the $e_i \in R$ are zero mean, Gaussian, independent with variance of $\sigma^2$. 
 The goal is to predict $y$ based on a new data sample $x$. 
-Under the assumptions, $y$, conditioned on $x$, has a normal distribution that depends on the learnable parameters $\theta$ 
+Under the assumptions $y$, conditioned on $x$, has a normal distribution that depends on the learnable parameters $\theta$ 
 \begin{equation}
 p_{\theta}(y) 
-=\frac{1}{\sqrt[]{2\pi\sigma^2}}exp\left\{-\frac{1}{2\sigma^2}\big(y- x^T\theta \big)^2\right\}  \\
+=\frac{1}{\sqrt[]{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}\big(y- x^T\theta \big)^2\right\}.
 \end{equation}
-The unknown parameter vector $\theta$ belongs to a set $\Theta$, which in the general case is the entire ${\cal R}^M$. In the regularized version (that leads to Ridge regression \cite{}), $\Theta$ is the sphere $|\theta|\leq A$. 
-In the next section the pNML will be evaluated for this hypotheses class. 
+The unknown parameter vector $\theta$ belongs to a set $\Theta$, which in the general case is the entire $R^M$. In the regularized version (that leads to Ridge regression \cite{ridgeregression}), $\Theta$ is the sphere $|\theta|\leq A$. 
+In the next section, the pNML will be evaluated for this hypotheses class. 
 Recall that the pNML learner of $y$ given the the test sample $x$ and the training set $z^N=\{(x_i,y_i)\}_{i=1}^{N}$ is given by:
 \begin{equation} \label{eq:pNML_def}
-q_{\mbox{\tiny{pNML}}}(y|x;z^N) = \frac{1}{\Gamma} p_{\hat{\theta}(z^N;x,y)}(y|x).
+q_{\mbox{\tiny{pNML}}}(y|x;z^N) = \frac{1}{\kappa} p_{\hat{\theta}(z^N;x,y)}(y|x).
 \end{equation}
 where in the linear regression case 
 \begin{align}
 \hat{\theta}(z^N,x,y)= \arg\min_{\theta\in\Theta} \left[ \sum_{i=1}^N \left(y_i - x_i^T\theta \right)^2 + \left(y-x^T\theta\right)^2 \right]
 \end{align}
-and where  $\Gamma$ is the the normalization factor:
-% as the normalization factor of the pNML learner
+and where  $\kappa$ is the the normalization factor:
 \begin{equation} \label{gamma}
-\Gamma(z^N,x) = \int_R  p_{\hat{\theta}(z^N;x,y)}(y|x)dy,   
+\kappa = R^*(z^N,x) = \int_R  p_{\hat{\theta}(z^N;x,y)}(y|x)dy,   
 \end{equation}
 
-The target is to find an analytic expression for (\ref{eq:pNML_def}) and for the learnability measure $\log \Gamma(z^N,x)$, i.e., the minmax value.
+The goal is to find an analytic expression for (\ref{eq:pNML_def}) and for the learnability measure $\Gamma = \log \kappa$, the minmax regret value.
 
 
 \section{pNML Evaluation} \label{sec:pNML_eval}
-The following notation is used. $X \in R^{M \times N+1}$ is the matrix which contains all the training data along with the test sample and $Y \in R^{N+1}$ is the vector which contains all the labels including the test label, i.e.,
-% and $e \in R^{N+1}$ for the noise vector
+The following notation is used. 
+$X \in R^{M \times N+1}$ is the matrix which contains all the training data along with the test sample and $Y \in R^{N+1}$ is the vector which contains all the labels including the test label, i.e.,
 \begin{equation}
 X = \begin{bmatrix} x_1 & \dots & x_N & x \end{bmatrix}, \;\;\ \ 
 Y = \begin{bmatrix} y_1 \\ \vdots \\ y_N \\ y \end{bmatrix}
@@ -267,36 +257,29 @@ Assuming that the test label $y$ is given, the optimal solution under least squa
 \begin{equation}
 \hat{\theta}(z^N,x,y) = \theta^*_{N+1} = (X^T X)^{-1} X^T Y
 \end{equation}
-By the recursive least square (RLS) formulation \cite{hayes19969}:
+By the Recursive Least Squares (RLS) formulation \cite{hayes19969}:
 \begin{equation} \label{eq:rls_update}
 \theta ^*_{N+1} = \theta^*_{N} + P_{N+1} x (y - \hat{y})
 \end{equation}
-where $\hat{y} = x^T \theta ^*_{N}$ is the ERM prediction based on the samples $\{(x_i, y_i)\}_{i=1}^{N}$ and 
-%$P_N$ is the inverse covariance matrix of the data.§
-%Without loss of generality, $\mu _{X} = 0$ and therefore the inverse covariance matrix becomes the inverse correlation matrix
+where $\hat{y} = x^T \theta ^*_{N}$ is the ERM prediction based on the samples $\{(x_i, y_i)\}_{i=1}^{N}$ and
 \begin{equation}
 P_{N+1} = (XX^T)^{-1}. 
 \end{equation}
-Note that in RLS $P_{N+1}$ is also calculated recursively from $P_N$, but this is not needed at this point.
-Now, 
-%The probability distribution of our estimation of $y$ can be written as
+Note that in RLS, $P_{N+1}$ is also calculated recursively from $P_N$, but this is not needed at this point.
+Now,
 \begin{equation}
 \begin{split}
 &P_{\theta_{N+1}^*}(y) 
 =\frac{1}{\sqrt[]{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}\big(y- x^T\theta_{N+1}^* \big)^2\right\} = \\
 & \qquad \frac{1}{\sqrt[]{2\pi\sigma^2}}\exp\bigg\{-\frac{1}{2\sigma^2}\big(y - x^T \big(\theta^*_{N} + \\ 
-& \qquad \qquad \qquad \qquad \qquad P_{N+1} x (y -\hat{y}) \big) \big)^2\bigg\} = \\
-% =\frac{1}{\sqrt[]{2\pi\sigma^2}}
-% exp\left\{-\frac{1}{2\sigma^2}\left((1-x^T P_{N+1} x)y-\hat{y} + x^T P_{N+1} x\hat{y} \right)^2\right\}  \\
-% =\frac{1}{\sqrt[]{2\pi\sigma^2}}
-% exp\left\{-\frac{1}{2\sigma^2}\left((1-x^T P_N x)y-(1 - x^T P_N x )\hat{y} \right)^2\right\}  \\
+& \qquad \qquad \qquad \qquad \qquad \qquad P_{N+1} x (y -\hat{y}) \big) \big)^2\bigg\} = \\
 & \qquad \frac{1}{\sqrt[]{2\pi\sigma^2}}
 \exp\left\{-\frac{(1 - x^T P_{N+1} x )^2 }{2\sigma^2}\left(y-\hat{y} \right)^2\right\}.  \\
 \end{split}
 \end{equation}
-To get the pNML normalization factor (\ref{gamma}), we integrate
+To get the pNML normalization factor (\ref{gamma}), we integrate over all possible labels
 \begin{multline}
-\Gamma = %\int_R \max_{\theta} P_\theta(y|X^T)dy = \\
+\kappa = %\int_R \max_{\theta} P_\theta(y|X^T)dy = \\
 \int_{-\infty}^{\infty} \frac{1}{\sqrt[]{2\pi\sigma^2}}
 \ exp\left\{-\frac{(1 - x^T P_{N+1} x )^2 }{2\sigma^2}
 \left(y- \hat{y} \right)^2\right\} dy\\ 
@@ -305,29 +288,25 @@ To get the pNML normalization factor (\ref{gamma}), we integrate
 \end{multline}
 Thus, the pNML distribution of $y$ given $x$ is:
 \begin{multline}
-q_{\mbox{\tiny{pNML}}}(y | x; z^N) = \frac{1}{\Gamma}p_{\theta_{N+1}^*}(y|x) = \\
+q_{\mbox{\tiny{pNML}}}(y | x; z^N) = \frac{1}{\kappa}p_{\theta_{N+1}^*}(y|x) = \\
 \frac{1 - x^T P_{N+1} x }{\sqrt[]{2\pi\sigma^2}}
 \exp\left\{-\frac{(1 - x^T P_{N+1} x )^2 }{2\sigma^2}\left(y-\hat{y} \right)^2\right\} \\
 \end{multline}
 and its associate learnability measure or regret:
-%We can also calculate the regret of the pNML. From equation \ref{eq:pNML_regret}, the regret is the log of the pNML normalization factor
 \begin{equation} \label{eq:regret}
-\log \Gamma (z^N,x) = \log\left(\frac{1}{1 - x^T (XX^T)^{-1} x } \right).
+\Gamma = \log \kappa = \log\left(\frac{1}{1 - x^T (XX^T)^{-1} x } \right).
 \end{equation}
-%The regret is associated with the uncertainty of the model prediction of the test sample. It can be seen that it depends on the hypothesis class (the least squares in this case) and on the data.
 
+% -------------------------
+% pNML with Regularization
+% --------------------------
 \section{pNML with Regularization} \label{sec:pNMLwithReg}
-Assuming now that the model class $\Theta$ is constrained to the sphere  $|\theta|\leq A$, for some $A$. Using a Lagrange multiplier $\lambda$ we get the Tikhonov regularization (or Ridge regression), where the expression to minimize is now: 
+Assuming now that the model class $\Theta$ is constrained to the sphere  $|\theta|\leq A$, for some $A$. 
+Using a Lagrange multiplier $\lambda$ we get the Tikhonov regularization (or Ridge regression), where the expression to minimize is now: 
 \begin{equation}
 \mathcal{L}(z^N)= \sum_{i=1}^{N}|y_i-x_i^T \theta|^2 + \lambda |\theta|^2
 \end{equation}
-%where $\lambda$ is the regularization term.
-%The hypothesis class is therefore is changed to
-%\begin{equation} \label{eq:ls_reg_hypotheses_class}
-%\Theta := \left\{ \underset{\theta}{\textit{argmin }} \sum_{i=1}^{N} | x^T_i \theta - y |^2 + \lambda ||\theta||_2^2 \right\}.
-%\end{equation}
 With the test data, the ``regularized'' least square solution is:
-%In this case the solution of the least squares predictor is
 \begin{equation}
 \hat{\theta}(z^N,x,y) = \theta_{N+1}^* = (X^T X+ \lambda I)^{-1} X^T Y
 \end{equation}
@@ -339,27 +318,30 @@ However, now
 \begin{equation}
 P_{N+1}= (X^T X+ \lambda I)^{-1}.    
 \end{equation}
-The rest of the evaluation can follow as before. Thus,
-the pNML learner in this ``regularized'' case is 
+The rest of the evaluation can follow as before. 
+Thus, the pNML learner in this ``regularized'' case is 
 \begin{multline} \label{eq:pNML_least_sqaures}
 q_{\mbox{\tiny{pNML}}}(y|x; z^N, \lambda)
 =\frac{1 - x^T (XX^T + \lambda I)^{-1} x }{\sqrt[]{2\pi\sigma^2}} \\
 \cdot \exp\left\{-\frac{(1 - x^T (XX^T + \lambda I)^{-1} x )^2 }{2\sigma^2}\left(y- \hat{y} \right)^2\right\} \\
 \end{multline}
 and the associated regret or the log-normalization factor:
-%f least squares with Tikhonov regularization hypothesis class is
 \begin{equation}
-\log \Gamma (z^N,x) = \log \left( \frac{1}{1 - x^T (XX^T + \lambda I)^{-1} x } \right)
+\Gamma = \log \kappa = \log \left( \frac{1}{1 - x^T (XX^T + \lambda I)^{-1} x } \right)
 \end{equation}
 Note that regularization can help in the case where $XX^T$, the un-normalized correlation matrix of the data is
-ill conditioned. In the next section we find the ``learnable space'' for the linear regression problem and observe situations where this regularization is needed.
+ill conditioned. 
+In the next section we find the ``learnable space'' for the linear regression problem and observe situations where this regularization is needed.
 
+% ------------------
+% Learnable Space
+% ------------------
 \section{Learnable Space} \label{sec:learnable_space}
-In order to understand for which test sample the trained model generalizes well we need to look at the regret expression (\ref{eq:regret}). High regret means that the pNML learner is very far from the genie and therefore we may not trust its predictions. Low regret, on the other hand, means the model is as good as a genie who knows the true test label, and so it is trusted.
+In order to understand for which test sample the trained model generalizes well we need to look at the regret expression (\ref{eq:regret}). 
+High regret means that the pNML learner is very far from the genie and therefore we may not trust its predictions. 
+Low regret, on the other hand, means the model is as good as a genie who knows the true test label, and so it is trusted.
 
-%Applying the singular value decomposition (SVD) on the training set 
 Consider the matrix $X_N = [x_1,x_2, \hdots, x_{N}]$, composed of the training data, and apply the singular value decomposition (SVD) on it, i.e., $X_N = U \Sigma V^T$ with $U\in R^{M \times M}$, 
-%where M is the number of features ($x \in R^M$) and 
 $\Sigma$ is a rectangular diagonal matrix of the singular values and $V \in R^{N \times N}$. 
 The expression $x^T(XX^T)^{-1}x$ can be rewritten as:
 \begin{multline}
@@ -388,10 +370,11 @@ x^T(XX^T)^{-1}x = \frac{1}{N}\gamma - \frac{\frac{1}{N^2}\gamma^2}{1+\frac{1}{N}
 \end{equation}
 Plugging in the regret formula (\ref{eq:regret}):
 \begin{equation}
-\log \Gamma = \log \left( \frac{1}{1-\frac{\frac{1}{N}\gamma}{1+\frac{1}{N}\gamma}} \right)
+\Gamma = \log \kappa = \log \left( \frac{1}{1-\frac{\frac{1}{N}\gamma}{1+\frac{1}{N}\gamma}} \right)
 =  \log \left( 1+\frac{1}{N} \gamma \right).
 \end{equation}
-Let $u_i$ be the eigenvectors of the empirical correlation matrix of the training data. Express $\gamma$ by $x^Tu_i$, the projections of $x$ on $u_i$:
+Let $u_i$ be the eigenvectors of the empirical correlation matrix of the training data. 
+Expressing $\gamma$ by $x^Tu_i$, the projections of $x$ on $u_i$:
 \begin{multline}
 \gamma = 
 \begin{bmatrix}
@@ -409,23 +392,21 @@ u_1^T x \\ \vdots \\ u_M^T x
 \end{multline}
 The final regret expression is thus:
 \begin{equation}
-\log \Gamma = \log \left(1 + \frac{1}{N} \sum_{i=0}^{M} \frac{\left(x^Tu_i\right)^2 }{\eta_i}\right).
+\Gamma = \log \kappa = \log \left(1 + \frac{1}{N} \sum_{i=0}^{M} \frac{\left(x^Tu_i\right)^2 }{\eta_i}\right).
 \end{equation}
-%Note that $u_i^T x$ is the projection of $x$ on the i-th dimension of the correlation matrix of the training set. 
 If the test sample $x$ lies mostly in the subspace spanned by the eigenvectors with large eigenvalues, then the model can generalize well even if $M>N$.
-%, while if the test sample is in a subspace corresponding to small (or zero) eigenvalues, the regret will be large.
-% and hence the model prediction is not reliable.
 
+% -----------
+% Simulation
+% -----------
 \section{Simulation} \label{sec:simulation}
-In this section we present some simulations that demonstrate the results above. We chose the problem of fitting polynomial to data, which is a special case of linear regression.
+In this section we present some simulations that demonstrate the results above. We chose the problem of fitting a polynomial to data, which is a special case of linear regression.
 The simulation show prediction and generalization capabilities in a variety of polynomial degrees and regularization factors.
 
-%\subsection{Least Squares with Regularization} \label{sec:least_sqaures_with_reg}
-%We compare predictions of least squares hypothesis class with different regularization terms.
 In the first experiment we generated 3 random points, $t_0,t_1,t_2$, uniformly in the interval $[-1, 1]$. These points are the training set and are shown in Figure \ref{fig:least_squares_with_reg} (top) as red dots. 
-The relation between $y$ and $t$ is given by as polynomial of degree $2$.
+The relation between $y$ and $t$ is given by a polynomial of degree two.
 Thus, the X matrix of section \ref{sec:formal_problem_def} is given by:
-\begin{equation}
+\begin{equation} \label{eq:two_degree_pol}
 X = 
 \begin{bmatrix}
 1 & 1 & 1 \\
@@ -434,22 +415,22 @@ t_0^2 & t_1^2 & t_2^2
 \end{bmatrix}.
 \end{equation}
 Based on the training we predict a probability for all t values in the interval [-1,1] using (\ref{eq:pNML_least_sqaures}) with a regularization factor $\lambda$ of $0$, $0.1$ and $1.0$. 
-It is shown in Figure \ref{fig:least_squares_with_reg} (top) that without regularization ($\lambda=0$), the blue curve fits the data exactly. As $\lambda$ increases the fitted curve becomes less steep but tends to fit less the training data.
+It is shown in Figure \ref{fig:least_squares_with_reg} (top) that without regularization ($\lambda=0$), the blue curve fits the data exactly. As $\lambda$ increases the fitted curve becomes less steep but tends to fit less to the training data.
 
-Figure \ref{fig:least_squares_with_reg} (bottom) shows the regret, given by (\ref{eq:regret}), for the degree $2$ polynomial model for all $t\in[-1,1]$ where the training $t_i$'s are marked in red on the x axis. 
-We can see that around the training data the regret is very low in comparison to areas where training data does not exist. 
-In addition, with regularization, the overall regret is lower and is greater than $1.0$ only on the edges of the interval.
-For all regularization terms, the regret values increases as moving away from the training data.
+Figure \ref{fig:least_squares_with_reg} (bottom) shows the regret, given by (\ref{eq:regret}), for the polynomial model from \eqref{eq:two_degree_pol} for all $t\in[-1,1]$ where the training $t_i$'s are marked in red on the x axis. 
+We can see that around the training data the regret is very low in comparison to areas where there are no training data. 
+In addition, models with larger regularization term have lower regret for every point in the interval $[-1,1]$.
+For all regularization terms, the regret increases as moving away from the training data.
 
-\begin{figure}[h] 
+\begin{figure}[tb] 
     \centering
-    \includegraphics[width=\linewidth]{figures/least_sqaures_with_regularization.jpg}
-    \caption{\textbf{Least squares predictor with variety of regularization terms.} (Top) The least squares estimator fitted to the training data (in red) with different values of regularization term. (Bottom) The regret of the pNML learner from (\ref{eq:regret}) on the interval [-1,1]. The training data t values are marked in red on the x axis.}
+    \includegraphics[width=\linewidth]{least_squares_with_regularization.jpg}
+    \caption{\textbf{Least squares predictor with variety of regularization terms.} (Top) The least squares estimator fitted to the training data (in red) with different values of regularization term. (Bottom) The regret of the pNML learner from (\ref{eq:regret}) on the interval [-1,1]. The training data are marked in red on the x axis.}
     \label{fig:least_squares_with_reg}
 \end{figure}
 
-%\subsection{Least Squares with different Polynomial Degree} \label{sec:least_sqaures_with_pol_deg}
-Next, we simulate the case of fitting polynomials with different degrees. Again, we generated 3 random points uniformly in the interval $[-1, 1]$.
+Next, we simulate the case of fitting polynomials with different degrees. 
+Again, we generated 3 random points in the interval $[-1, 1]$.
 The matrix $X$ is now:
 \begin{equation}
 X = 
@@ -460,14 +441,18 @@ t_0 & t_1 & t_2 \\
 t_0^{\textit{Poly Deg}} & t_1^{\textit{Poly Deg}} & t_2^{\textit{Poly Deg}} 
 \end{bmatrix}.
 \end{equation}
-Figure \ref{fig:least_squares_with_poly} (top) shows the predicted label for every $t$ value in $[-1,1]$ for the different polynomial degrees. To avoid singularities we used the regularized version with $\lambda=10^{-4}$. The training set is shown by red dots in the figure. 
-Note that for a polynomial of degree $3$, the number of parameters is greater than the size of the training set. Nevertheless, the prediction accuracy near the training samples is similar to that of a degree $2$ polynomial.
-Figure \ref{fig:least_squares_with_poly} (bottom) shows the regret (or learnability) of the three pNML learners corresponding to model classes of polynomials with the various degrees. All the learners have regret values that are small near the training samples and large as $t$ drifts away from these samples.
+Figure \ref{fig:least_squares_with_poly} (top) shows the predicted label for every $t$ value in $[-1,1]$ for the different polynomial degrees. 
+To avoid singularities we used the regularized version with $\lambda=10^{-6}$. 
+The training set is shown by red dots in the figure. 
+Note that for a polynomial of degree three, the number of parameters is greater than the size of the training set. 
+Nevertheless, the prediction accuracy near the training samples is similar to that of a degree two polynomial.
+Figure \ref{fig:least_squares_with_poly} (bottom) shows the regret (or learnability) of the three pNML learners corresponding to model classes of polynomials with the various degrees. 
+All the learners have regret values that are small near the training samples and large as $t$ drifts away from these samples.
 
 
-\begin{figure}[h]
+\begin{figure}[tb]
     \centering
-    \includegraphics[width=\linewidth]{figures/least_sqaures_with_poly_degree.jpg}
+    \includegraphics[width=\linewidth]{least_squares_with_poly_degree.jpg}
     \caption{\textbf{Least squares predictor with different polynomial degree.} (Top) pNML least squares predictions with different polynomial degrees. (Bottom) The regret of the pNML learners from (\ref{eq:regret}) on the interval [-1,1]. The training data t values are marked in red on the x axis.}
     \label{fig:least_squares_with_poly}
 \end{figure}
@@ -476,12 +461,20 @@ Figure \ref{fig:least_squares_with_poly} (bottom) shows the regret (or learnabil
 \section{Conclusions} \label{sec:conclusion}
 
 In this paper, we provided an explicit analytical solution of the pNML universal learning scheme and its learnability measure for the linear regression hypothesis class. 
-Interestingly, the predicted universal pNML assignment is Gaussian with a mean that is equal to that of the ERM, but with a variance that increases by a factor $\Gamma$ whose logarithm is the learnability measure.
-Analyzing $\Gamma$ we can observe the ``learnability space'' for this problem. Specifically, 
-if a test sample mostly lies in the subspace spanned by the eigenvectors associated with large eigenvalues of the empirical correlation matrix then the learner can generalize well, even in an over-parameterized case where the regression dimension is larger than the number of training samples. 
-Finally, we have provided a simulation of the pNML least squares prediction for polynomial interpolation with different regularization factors and polynomial degrees. 
+Interestingly, the predicted universal pNML assignment is Gaussian with a mean that is equal to that of the ERM, but with a variance that increases by a factor $\kappa$ whose logarithm is the learnability measure $\Gamma$.
+Analyzing $\Gamma$ we can observe the ``learnability space'' for this problem. 
+Specifically, if a test sample mostly lies in the subspace spanned by the eigenvectors associated with large eigenvalues of the empirical correlation matrix then the learner can generalize well, even in an over-parameterized case where the regression dimension is larger than the number of training samples.
+Finally, we provided a simulation of the pNML least squares prediction for polynomial interpolation.% with different regularization factors and polynomial degrees. 
+% Finally, we have provided a simulation of the pNML least squares prediction for polynomial interpolation with different regularization factors and polynomial degrees. 
 
-This work suggests a number of potential directions for future work, some are already explored in an accompanying paper \cite{pNML_neural_networks}. We conjecture that as in linear regression other ``over-parameterized'' model classes are learnable at least locally at some learnable space, that can be inferred from the pNML solution. This notion is indeed corroborated by the findings in \cite{pNML_neural_networks}.
+This work suggests a number of potential directions for future work, some are already explored in an accompanying paper \cite{pNML_neural_networks}. 
+We conjecture that as in linear regression other ``over-parameterized'' model classes are learnable at least locally, that can be inferred from the pNML solution. 
+This notion is indeed corroborated by the findings in \cite{pNML_neural_networks}.
+%These include: (1) evaluate the pNML learners for more hypothesis classes. (2) Obtain the learnable space under the PAC and Stochastic setting.
+
+% This work suggests a number of potential directions for future work, some are already explored in an accompanying paper \cite{pNML_neural_networks}. 
+% We conjecture that as in linear regression other ``over-parameterized'' model classes are learnable at least locally at some learnable space, that can be inferred from the pNML solution. 
+% This notion is indeed corroborated by the% findings in \cite{pNML_neural_networks}.
 %These include: (1) evaluate the pNML learners for more hypothesis classes. (2) Obtain the learnable space under the PAC and Stochastic setting.
 
 
