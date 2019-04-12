@@ -400,8 +400,9 @@ If the test sample $x$ lies mostly in the subspace spanned by the eigenvectors w
 % Simulation
 % -----------
 \section{Simulation} \label{sec:simulation}
-In this section we present some simulations that demonstrate the results above. We chose the problem of fitting a polynomial to data, which is a special case of linear regression.
-The simulation show prediction and generalization capabilities in a variety of polynomial degrees and regularization factors.
+In this section we present some simulations that demonstrate the results above. 
+We chose the problem of fitting a polynomial to data, which is a special case of linear regression.
+The simulations show prediction and generalization capabilities in a variety of regularization factors and polynomial degrees.
 
 In the first experiment we generated 3 random points, $t_0,t_1,t_2$, uniformly in the interval $[-1, 1]$. These points are the training set and are shown in Figure \ref{fig:least_squares_with_reg} (top) as red dots. 
 The relation between $y$ and $t$ is given by a polynomial of degree two.
@@ -430,22 +431,22 @@ For all regularization terms, the regret increases as moving away from the train
 \end{figure}
 
 Next, we simulate the case of fitting polynomials with different degrees. 
-Again, we generated 3 random points in the interval $[-1, 1]$.
+Again, we generated 10 random points in the interval $[-1, 1]$.
 The matrix $X$ is now:
 \begin{equation}
 X = 
 \begin{bmatrix}
-1 & 1 & 1 \\
-t_0 & t_1 & t_2 \\
-\vdots \\
-t_0^{\textit{Poly Deg}} & t_1^{\textit{Poly Deg}} & t_2^{\textit{Poly Deg}} 
+1 & 1 & 1 & \hdots & 1\\
+t_0 & t_1 & t_2 & \hdots & t_{9}\\
+\vdots &  \vdots &       & \vdots  \\
+t_0^{\textit{Poly Deg}} & t_1^{\textit{Poly Deg}} & t_2^{\textit{Poly Deg}}  & \hdots & t_{9}^{\textit{Poly Deg}}
 \end{bmatrix}.
 \end{equation}
 Figure \ref{fig:least_squares_with_poly} (top) shows the predicted label for every $t$ value in $[-1,1]$ for the different polynomial degrees. 
-To avoid singularities we used the regularized version with $\lambda=10^{-6}$. 
+To avoid singularities we used the regularized version with $\lambda=10^{-4}$. 
 The training set is shown by red dots in the figure. 
-Note that for a polynomial of degree three, the number of parameters is greater than the size of the training set. 
-Nevertheless, the prediction accuracy near the training samples is similar to that of a degree two polynomial.
+Note that for a polynomial of degree ten, the number of parameters is greater than the size of the training set. 
+Nevertheless, the prediction accuracy near the training samples is similar to that of a degree three polynomial.
 Figure \ref{fig:least_squares_with_poly} (bottom) shows the regret (or learnability) of the three pNML learners corresponding to model classes of polynomials with the various degrees. 
 All the learners have regret values that are small near the training samples and large as $t$ drifts away from these samples.
 
